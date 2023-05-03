@@ -1,3 +1,4 @@
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
@@ -20,6 +21,26 @@ module.exports = {
           "sass-loader", // compiles Sass to CSS
         ],
       },
+      // Models
+      {
+        test: /\.(glb|gltf|fbx|obj)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              outputPath: "assets/models/",
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(csv|tsv)$/i,
+        use: ["csv-loader"],
+      },
+      {
+        test: /\.xml$/i,
+        use: ["xml-loader"],
+      },
     ],
   },
   resolve: {
@@ -31,6 +52,18 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
   },
   plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "src/assets"),
+          to: path.resolve(__dirname, "dist/assets"),
+        },
+        {
+          from: path.resolve(__dirname, "src/libs"),
+          to: path.resolve(__dirname, "dist/libs"),
+        },
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
