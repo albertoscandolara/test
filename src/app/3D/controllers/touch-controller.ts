@@ -116,8 +116,10 @@ export class TouchScreenController extends ParentController {
     }
 
     if (
-      touch.y < center.y + this._controllerDOMRect.height / 2 &&
-      touch.y > center.y - this._controllerDOMRect.height / 2
+      Math.sqrt(
+        Math.pow(Math.abs(touch.x - center.x), 2) +
+          Math.pow(Math.abs(touch.y - center.y), 2)
+      ) < this._controllerDOMRect.height
     ) {
       this._isRunning = false;
     } else {
@@ -126,12 +128,18 @@ export class TouchScreenController extends ParentController {
   }
 
   private _touchEnd(event: TouchEvent): void {
-    this._touchController.classList.add(mobileJoystickDefaultClass);
     this._move = {
       forward: false,
       backward: false,
       right: false,
       left: false,
     };
+    this._isRunning = false;
+
+    this._touchController.classList.add(mobileJoystickDefaultClass);
+
+    // Remove inline properties
+    this._touchController.style.removeProperty("left");
+    this._touchController.style.removeProperty("top");
   }
 }
