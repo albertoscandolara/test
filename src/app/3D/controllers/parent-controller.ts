@@ -13,6 +13,7 @@ export class Move {
 
   /**
    * Constructor
+   * @ignore
    */
   constructor() {
     this.forward = false;

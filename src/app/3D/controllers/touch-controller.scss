@@ -1,24 +1,24 @@
 .outer-touch-controller {
     position: absolute;
+    border-radius: 50%;
     right: 0%;
     bottom: 0%;
     margin: 5%;
     width: 20%;
     aspect-ratio: 1;
-    border-radius: 50%;
-    background-color: #afafaf;
+    background-color: #6161616c;
 
     .touch-controller {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
         width: 40%;
         aspect-ratio: 1;
-        border-radius: 50%;
         background-color: #ffffff;
 
         &.default {
-            position: absolute;
             left: 50%;
             top: 50%;
-            transform: translate(-50%, -50%);
         }
     }
 }
