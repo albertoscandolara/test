@@ -1,8 +1,8 @@
-import { Logger } from '../../../app/logger';
-import { App3D } from '../app-3D';
-import { resizeEventEmitter } from '../../event-emitter/events';
+import { Logger } from "../../../app/logger";
+import { App3D } from "../app-3D";
+import { resizeEventEmitter } from "../../event-emitter/events";
 
-import { sizesResizeObserverLogDebounceTime } from '../../../config/app-3D';
+import { sizesResizeObserverLogDebounceTime } from "../../../config/app-3D";
 
 export class Sizes {
   declare _container: HTMLElement;
@@ -33,7 +33,9 @@ export class Sizes {
    * Set event listeners connected to this class
    */
   private setEventListeners(): void {
-    this._resizeObserverContainer = new ResizeObserver((entries) => this.updateSizesValues(entries));
+    this._resizeObserverContainer = new ResizeObserver((entries) =>
+      this.updateSizesValues(entries)
+    );
     this.startObserving();
   }
 
@@ -66,10 +68,14 @@ export class Sizes {
         clearTimeout(this._containerResizeObserverLogTimer);
         if (
           !this._containerResizeObserverLogTimer ||
-          ((this._containerResizeObserverLogTimer as unknown) as number) < sizesResizeObserverLogDebounceTime
+          (this._containerResizeObserverLogTimer as unknown as number) <
+            sizesResizeObserverLogDebounceTime
         ) {
           this._containerResizeObserverLogTimer = setTimeout(() => {
-            this._logger.log(`'${this._container.classList}' container sizes have changed:`, this);
+            this._logger.log(
+              `'${this._container.classList}' container sizes have changed:`,
+              this
+            );
           }, sizesResizeObserverLogDebounceTime);
         }
       }

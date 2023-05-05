@@ -1,37 +1,37 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
-import { App } from '../app';
+import { App } from "../app";
 import {
   assetLoadedEventEmitter,
   changeEnvironmentEventEmitter,
   cubeTextureLoadedEventEmitter,
   resizeEventEmitter,
   showInteractionTabEventEmitter,
-  tickEventEmitter
-} from '../event-emitter/events';
-import { Logger } from '../logger';
-import { Sizes } from './utils/sizes';
-import { Time } from './utils/time';
-import { Camera } from './camera';
-import { Renderer } from './renderer';
-import { World } from './world/world';
+  tickEventEmitter,
+} from "../event-emitter/events";
+import { Logger } from "../logger";
+import { Sizes } from "./utils/sizes";
+import { Time } from "./utils/time";
+import { Camera } from "./camera";
+import { Renderer } from "./renderer";
+import { World } from "./world/world";
 
-import { canvasSelector, canvasHTMLTemplate } from '../../config/app-3D';
+import { canvasSelector, canvasHTMLTemplate } from "../../config/app-3D";
 
-import { EnvironmentsManager } from '../managers/environments-manager';
-import { AssetsManager } from '../managers/assets-manager';
-import { CharactersManager } from '../managers/characters-manager';
-import { BuildingsManager } from '../managers/buildings-manager';
-import { ItemsManager } from '../managers/items-manager';
-import { Debug } from '../debug';
-import { GUI } from './dat-gui';
-import { Controller } from './controllers/controller';
+import { EnvironmentsManager } from "../managers/environments-manager";
+import { AssetsManager } from "../managers/assets-manager";
+import { CharactersManager } from "../managers/characters-manager";
+import { BuildingsManager } from "../managers/buildings-manager";
+import { ItemsManager } from "../managers/items-manager";
+import { Debug } from "../debug";
+import { GUI } from "./dat-gui";
+import { Controller } from "./controllers/controller";
 
-import { DracoLoader } from './loaders/dracoLoader';
-import { CubeTextureLoader } from './loaders/cubeTextureLoader';
-import { BackgroundCubeTexturesManager } from '../managers/background-cube-textures';
-import { Language } from '../language';
-import { Model } from '../../models/3D/environment/model';
+import { DracoLoader } from "./loaders/dracoLoader";
+import { CubeTextureLoader } from "./loaders/cubeTextureLoader";
+import { BackgroundCubeTexturesManager } from "../managers/background-cube-textures";
+import { Language } from "../language";
+import { Model } from "../../models/3D/environment/model";
 
 export class App3D {
   declare _debug: Debug;
@@ -97,7 +97,7 @@ export class App3D {
    * Set canvas element
    */
   private setCanvas() {
-    this._container.insertAdjacentHTML('beforeend', canvasHTMLTemplate);
+    this._container.insertAdjacentHTML("beforeend", canvasHTMLTemplate);
     this._canvas = document.querySelector(canvasSelector) as HTMLCanvasElement;
   }
 
@@ -110,8 +110,12 @@ export class App3D {
     assetLoadedEventEmitter.on((assetId: number) => this.setModel(assetId));
     cubeTextureLoadedEventEmitter.on(() => this.setBackgroundCubeTexture());
 
-    changeEnvironmentEventEmitter.on((environmentId: number) => this.changeEnvironment(environmentId));
-    showInteractionTabEventEmitter.on((model: Model) => this.setInteractionTab(model));
+    changeEnvironmentEventEmitter.on((environmentId: number) =>
+      this.changeEnvironment(environmentId)
+    );
+    showInteractionTabEventEmitter.on((model: Model) =>
+      this.setInteractionTab(model)
+    );
   }
 
   /**
