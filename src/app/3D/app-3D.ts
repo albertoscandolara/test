@@ -32,9 +32,11 @@ import { CubeTextureLoader } from "./loaders/cubeTextureLoader";
 import { BackgroundCubeTexturesManager } from "../managers/background-cube-textures";
 import { Language } from "../language";
 import { Model } from "../../models/3D/environment/model";
+import { TouchScreenDevice } from "../touch-screen";
 
 export class App3D {
   declare _debug: Debug;
+  declare _touchScreenDevice: TouchScreenDevice;
   declare _logger: Logger;
   declare _language: Language;
   declare _gui: GUI;
@@ -64,6 +66,7 @@ export class App3D {
    */
   constructor(app: App) {
     this._debug = app._debug;
+    this._touchScreenDevice = app._touchScreenDevice;
     this._logger = app._logger;
     this._language = app._language;
     this._container = app._appContainer;

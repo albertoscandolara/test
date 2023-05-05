@@ -15,7 +15,7 @@ import {
   AnimationNames,
 } from "../../../models/animations.dto";
 import { BehaviorSubject, map } from "rxjs";
-import { COLORS } from "../../../app/constants/colors";
+import { COLORS } from "../../../constants/colors";
 
 const SkeletonUtils = require("three/examples/jsm/utils/SkeletonUtils");
 
