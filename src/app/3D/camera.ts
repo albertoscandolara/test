@@ -59,7 +59,7 @@ export class Camera {
     this._instance.position.copy(model._asset.children[0].position);
     let cameraOffset: THREE.Vector3 = new THREE.Vector3();
 
-    const k: number = 4;
+    const k: number = 2;
     const assetHeight: number = model._height;
 
     cameraOffset.y = assetHeight * k;

@@ -1,9 +1,9 @@
-import { Logger } from '../logger';
+import { Logger } from "../logger";
 
-import { characters, mainCharacterId } from '../../config/characters';
-import { AssetsManager } from './assets-manager';
-import { Asset, AssetCategory } from '../../models/3D/environment/asset';
-import { Character } from '../../models/3D/environment/characters/character';
+import { characters, mainCharacterId } from "../../config/characters";
+import { AssetsManager } from "./assets-manager";
+import { Asset, AssetCategory } from "../../models/3D/environment/asset";
+import { Character } from "../../models/3D/environment/characters/character";
 
 let instance!: CharactersManager;
 
@@ -31,7 +31,9 @@ export class CharactersManager {
     this._characters = characters;
 
     this._assetsManager = new AssetsManager();
-    this._assets = this._assetsManager.getAssetsWithCategory(AssetCategory.Character);
+    this._assets = this._assetsManager.getAssetsWithCategory(
+      AssetCategory.Character
+    );
     this.setAssetIds();
 
     this._logger.log(`${this.constructor.name} class instantiated:`, this);
@@ -48,7 +50,9 @@ export class CharactersManager {
     });
 
     if (hasDuplicates) {
-      this._logger.error(`${this.constructor.name} - There are characters with duplicate ids`);
+      this._logger.error(
+        `${this.constructor.name} - There are characters with duplicate ids`
+      );
     }
 
     return hasDuplicates;
@@ -69,7 +73,11 @@ export class CharactersManager {
   private setAssetIds(): void {
     this._characters
       .filter((character) => character._assetId === -1)
-      .forEach((character) => (character._assetId = this._assets[Math.floor(Math.random() * this._assets.length)]._id));
+      .forEach(
+        (character) =>
+          (character._assetId =
+            this._assets[Math.floor(Math.random() * this._assets.length)]._id)
+      );
   }
 
   /**
@@ -81,7 +89,8 @@ export class CharactersManager {
 
     const min: number = Math.ceil(0);
     const max: number = Math.floor(this._characters.length) - 1;
-    const randomNumber: number = Math.floor(Math.random() * (max - min + 1)) + min;
+    const randomNumber: number =
+      Math.floor(Math.random() * (max - min + 1)) + min;
 
     return this._characters[randomNumber];
   }
@@ -96,13 +105,17 @@ export class CharactersManager {
 
     let character!: Character;
 
-    const characters: Array<Character> = this._characters.filter((character) => character.id === id);
+    const characters: Array<Character> = this._characters.filter(
+      (character) => character.id === id
+    );
 
     if (characters.length === 0) {
       this._logger.error(`No characters with id '${id}' found.`);
     } else {
       if (characters.length > 1) {
-        this._logger.warn(`More characters with id '${id}' found. Got the first one.`);
+        this._logger.warn(
+          `More characters with id '${id}' found. Got the first one.`
+        );
       }
       character = characters[0];
     }
@@ -115,6 +128,8 @@ export class CharactersManager {
    * @returns Main character
    */
   public getMainCharacter(): Character {
-    return this.getCharacterWithId(mainCharacterId);
+    return mainCharacterId < 0
+      ? this.getRandomCharacter()
+      : this.getCharacterWithId(mainCharacterId);
   }
 }

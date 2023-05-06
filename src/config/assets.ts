@@ -16,7 +16,7 @@ export const assets: Array<Asset> = [
   new Asset(
     0,
     "Robot_01",
-    200,
+    500,
     "A robot",
     new THREE.Vector3(0, 0, 0),
     new THREE.Euler(0, 0, 0),
@@ -38,8 +38,7 @@ export const assets: Array<Asset> = [
   new Asset(
     3,
     "Checkpoint",
-    10,
-    //70,
+    70,
     "Checkpoint",
     new THREE.Vector3(0, 0, 0),
     new THREE.Euler(0, 0, 0),
