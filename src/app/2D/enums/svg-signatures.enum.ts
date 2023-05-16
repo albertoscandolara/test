@@ -1,29 +1,29 @@
 export const SVG_SIGNATURES = {
-  CONTROLLER_SVG_TEMPLATE: 'controllerSvgTemplate',
-  CROSS_SVG_TEMPLATE: 'crossSvgTemplate',
-  DETAILS_SVG_TEMPLATE: 'detailsSvgTemplate',
-  HAMBURGER_MENU_SVG_TEMPLATE: 'hamburgerMenuSvgTemplate',
-  RESIZER_HORIZONTAL_SVG_TEMPLATE: 'resizerHorizontalSvgTemplate',
-  RESIZER_VERTICAL_SVG_TEMPLATE: 'resizerVerticalSvgTemplate',
-  SPINNER_SOLID_SVG_TEMPLATE: 'spinnerSolidSvgTemplate',
-  SPINNER_DOTS_SVG_TEMPLATE: 'spinnerDotsSvgTemplate',
+  CONTROLLER_SVG_SIGNATURE: "controllerSvgTemplate",
+  CROSS_SVG_SIGNATURE: "crossSvgTemplate",
+  DETAILS_SVG_SIGNATURE: "detailsSvgTemplate",
+  HAMBURGER_MENU_SVG_SIGNATURE: "hamburgerMenuSvgTemplate",
+  RESIZER_HORIZONTAL_SVG_SIGNATURE: "resizerHorizontalSvgTemplate",
+  RESIZER_VERTICAL_SVG_SIGNATURE: "resizerVerticalSvgTemplate",
+  SPINNER_SOLID_SVG_SIGNATURE: "spinnerSolidSvgTemplate",
+  SPINNER_DOTS_SVG_SIGNATURE: "spinnerDotsSvgTemplate",
 
   // Environments
-  CUBE_SVG_TEMPLATE: 'cubeSvgTemplate',
-  HOME_SVG_TEMPLATE: 'homeSvgTemplate',
-  USER_SVG_TEMPLATE: 'userSvgTemplate',
-  COMPUTER_SVG_TEMPLATE: 'computerSvgTemplate',
+  CUBE_SVG_SIGNATURE: "cubeSvgTemplate",
+  HOME_SVG_SIGNATURE: "homeSvgTemplate",
+  USER_SVG_SIGNATURE: "userSvgTemplate",
+  COMPUTER_SVG_SIGNATURE: "computerSvgTemplate",
 
   // Languages
-  ENGLISH_FLAG_SVG_TEMPLATE: 'englishFlagSvgTemplate',
-  FRENCH_FLAG_SVG_TEMPLATE: 'frenchFlagSvgTemplate',
-  ITALIAN_FLAG_SVG_TEMPLATE: 'italianFlagSvgTemplate',
-  RUSSIAN_FLAG_SVG_TEMPLATE: 'russianFlagSvgTemplate',
+  ENGLISH_FLAG_SVG_SIGNATURE: "englishFlagSvgTemplate",
+  FRENCH_FLAG_SVG_SIGNATURE: "frenchFlagSvgTemplate",
+  ITALIAN_FLAG_SVG_SIGNATURE: "italianFlagSvgTemplate",
+  RUSSIAN_FLAG_SVG_SIGNATURE: "russianFlagSvgTemplate",
 
   // Contacts
-  ANGEL_LIST_SVG_TEMPLATE: 'angelListContactSvgTemplate',
-  FACEBOOK_SVG_TEMPLATE: 'facebookContactSvgTemplate',
-  GITHUB_SVG_TEMPLATE: 'githubContactSvgTemplate',
-  INSTAGRAM_SVG_TEMPLATE: 'instagramContactSvgTemplate',
-  LINKEDIN_SVG_TEMPLATE: 'linkedInContactSvgTemplate'
+  ANGEL_LIST_SVG_SIGNATURE: "angelListContactSvgTemplate",
+  FACEBOOK_SVG_SIGNATURE: "facebookContactSvgTemplate",
+  GITHUB_SVG_SIGNATURE: "githubContactSvgTemplate",
+  INSTAGRAM_SVG_SIGNATURE: "instagramContactSvgTemplate",
+  LINKEDIN_SVG_SIGNATURE: "linkedInContactSvgTemplate",
 };

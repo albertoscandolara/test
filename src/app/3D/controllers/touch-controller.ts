@@ -3,7 +3,7 @@ import { ParentController } from "./parent-controller";
 
 import { INSERT_ADJACENT_HTML_POSITIONS } from "../../../constants/insertAdjacentHTMLPositions";
 import { App3D } from "../app-3D";
-import { DOM_EVENTS } from "../../../constants/DOMEevents";
+import { DOM_EVENTS } from "../../enums/DOMEevents";
 
 export const mobileJoystickClass: string = "touch-controller";
 export const mobileJoystickDefaultClass: string = "default";

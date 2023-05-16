@@ -30,7 +30,7 @@ import { Controller } from "./controllers/controller";
 import { DracoLoader } from "./loaders/dracoLoader";
 import { CubeTextureLoader } from "./loaders/cubeTextureLoader";
 import { BackgroundCubeTexturesManager } from "../managers/background-cube-textures";
-import { Language } from "../language";
+import { LanguageService } from "../language";
 import { Model } from "../../models/3D/environment/model";
 import { TouchScreenDevice } from "../touch-screen";
 
@@ -38,7 +38,7 @@ export class App3D {
   declare _debug: Debug;
   declare _touchScreenDevice: TouchScreenDevice;
   declare _logger: Logger;
-  declare _language: Language;
+  declare _language: LanguageService;
   declare _gui: GUI;
   declare _container: HTMLElement;
 

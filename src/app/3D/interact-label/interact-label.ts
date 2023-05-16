@@ -1,19 +1,22 @@
-import './interact-label.scss';
+import "./interact-label.scss";
 
-import { Logger } from '../../../app/logger';
-import { changeEnvironmentEventEmitter, showInteractionTabEventEmitter } from '../../../app/event-emitter/events';
-import { App3D } from '../app-3D';
-import { Language } from '../../language';
-import { Building } from '../../../models/3D/environment/buildings/building';
-import { Character } from '../../../models/3D/environment/characters/character';
-import { Item } from '../../../models/3D/environment/items/item';
-import { Model } from '../../../models/3D/environment/model';
+import { Logger } from "../../../app/logger";
+import {
+  changeEnvironmentEventEmitter,
+  showInteractionTabEventEmitter,
+} from "../../../app/event-emitter/events";
+import { App3D } from "../app-3D";
+import { LanguageService } from "../../language";
+import { Building } from "../../../models/3D/environment/buildings/building";
+import { Character } from "../../../models/3D/environment/characters/character";
+import { Item } from "../../../models/3D/environment/items/item";
+import { Model } from "../../../models/3D/environment/model";
 
 export class InteractLabel {
   declare _logger: Logger;
   declare _container: HTMLElement;
   declare _label: HTMLElement;
-  declare _language: Language;
+  declare _language: LanguageService;
   declare _visible: boolean;
   declare _model: Model | null;
 
@@ -36,7 +39,9 @@ export class InteractLabel {
    */
   set visible(bool: boolean) {
     this._visible = bool;
-    this._visible ? this._label.classList.remove('hidden') : this._label.classList.add('hidden');
+    this._visible
+      ? this._label.classList.remove("hidden")
+      : this._label.classList.add("hidden");
   }
 
   /**
@@ -59,9 +64,11 @@ export class InteractLabel {
    */
   private setLabel(): void {
     const markup: string = this.getLabelMarkup();
-    this._container.insertAdjacentHTML('beforeend', markup);
+    this._container.insertAdjacentHTML("beforeend", markup);
 
-    this._label = this._container.querySelector('.interactable-label-container') as HTMLElement;
+    this._label = this._container.querySelector(
+      ".interactable-label-container"
+    ) as HTMLElement;
   }
 
   /**
@@ -70,7 +77,7 @@ export class InteractLabel {
    * @returns string text
    */
   private getLabelText(): string {
-    let text: string = '';
+    let text: string = "";
 
     if (this._model instanceof Building) {
       text = `Enter this building`;
@@ -93,9 +100,11 @@ export class InteractLabel {
   public show(model: Model): void {
     this._model = model;
     const labelText: string = this.getLabelText();
-    (this._label.querySelector('.interactable-label-text') as HTMLElement).textContent = labelText;
+    (
+      this._label.querySelector(".interactable-label-text") as HTMLElement
+    ).textContent = labelText;
 
-    this._label.addEventListener('click', () => {
+    this._label.addEventListener("click", () => {
       this.interact();
     });
     this.visible = true;
@@ -106,7 +115,7 @@ export class InteractLabel {
    */
   public hide(): void {
     this._model = null;
-    this._label.removeEventListener('click', this.interact);
+    this._label.removeEventListener("click", this.interact);
     this.visible = false;
   }
 
@@ -130,7 +139,9 @@ export class InteractLabel {
    */
   public interact(): void {
     if (!this._model) {
-      this._logger.warn(`${this.constructor.name} Requesting interaction, but model is not set. Do not emit`);
+      this._logger.warn(
+        `${this.constructor.name} Requesting interaction, but model is not set. Do not emit`
+      );
       return;
     }
 

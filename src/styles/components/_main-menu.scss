@@ -1,0 +1,11 @@
+.app-2D-container {
+    &>.main-menu-hamburger-menu {
+    }
+}
+
+body {
+    &>.main-menu {
+        position: absolute;
+        margin: 1% 0;
+    }
+}

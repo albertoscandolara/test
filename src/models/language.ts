@@ -21,4 +21,8 @@ export class Language implements ILanguage {
     this._description = description;
     this._translationAttribute = translationAttribute;
   }
+
+  get ISOCode(): string {
+    return this._ISOCode;
+  }
 }

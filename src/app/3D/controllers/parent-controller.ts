@@ -1,4 +1,4 @@
-import { DOM_EVENTS } from "../../../constants/DOMEevents";
+import { DOM_EVENTS } from "../../enums/DOMEevents";
 import { MainCharacter } from "../../../models/3D/environment/characters/main-character";
 import { AnimationNames } from "../../../models/animations.dto";
 import { Logger } from "../../logger";

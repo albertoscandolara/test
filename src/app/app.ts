@@ -5,7 +5,7 @@ import {
 } from "../config/app";
 
 import { Debug } from "./debug";
-import { Language } from "./language";
+import { LanguageService } from "./language";
 import { Logger } from "./logger";
 import { UserAgent } from "./user-agent";
 
@@ -17,7 +17,7 @@ export class App {
   declare _debug: Debug;
   declare _touchScreenDevice: TouchScreenDevice;
   declare _logger: Logger;
-  declare _language: Language;
+  declare _language: LanguageService;
   //#userAgent: UserAgent;
 
   #app2D: App2D;
@@ -34,7 +34,7 @@ export class App {
     this._debug = new Debug();
     this._touchScreenDevice = new TouchScreenDevice();
     this._logger = new Logger();
-    this._language = new Language();
+    this._language = new LanguageService();
     //this.#userAgent = new UserAgent();
 
     this.render();

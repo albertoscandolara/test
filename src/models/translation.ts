@@ -1,5 +1,12 @@
+import {
+  englishISOCode,
+  frenchISOCode,
+  italianISOCode,
+  russianISOCode,
+} from "../config/languages";
+
 export interface ITranslation {
-  readonly _en_En: string;
+  readonly _en_EN: string;
   readonly _fr_FR: string;
   readonly _it_IT: string;
   readonly _ru_RU: string;
@@ -8,7 +15,7 @@ export interface ITranslation {
 }
 
 export class Translation implements ITranslation {
-  _en_En: string;
+  _en_EN: string;
   _fr_FR: string;
   _it_IT: string;
   _ru_RU: string;
@@ -17,12 +24,12 @@ export class Translation implements ITranslation {
    * Constructor
    */
   constructor(
-    en_En: string = "",
+    en_EN: string = "",
     fr_FR: string = "",
     it_IT: string = "",
     ru_RU: string = ""
   ) {
-    this._en_En = en_En;
+    this._en_EN = en_EN;
     this._fr_FR = fr_FR;
     this._it_IT = it_IT;
     this._ru_RU = ru_RU;
@@ -36,16 +43,16 @@ export class Translation implements ITranslation {
   public getValue(language: string = ""): string {
     let value: string = "";
     switch (language) {
-      case "en-En":
-        value = this._en_En;
+      case englishISOCode:
+        value = this._en_EN;
         break;
-      case "fr-FR":
+      case frenchISOCode:
         value = this._fr_FR;
         break;
-      case "it-IT":
+      case italianISOCode:
         value = this._it_IT;
         break;
-      case "ru-RU":
+      case russianISOCode:
         value = this._ru_RU;
         break;
     }

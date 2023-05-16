@@ -1,15 +1,21 @@
-import { Language } from '../models/language';
+import { Language } from "../models/language";
 
-const english: string = 'en-En';
-const french: string = 'fr-FR';
-const italian: string = 'it-IT';
-const russian: string = 'ru-RU';
+export const englishISOCode: string = "en-GB";
+export const frenchISOCode: string = "fr-FR";
+export const italianISOCode: string = "it-IT";
+export const russianISOCode: string = "ru-RU";
 
-export const defaultLanguage: string = english;
-export const availableLanguages: Array<string> = [english, french, italian, russian];
+export const defaultLanguage: string = englishISOCode;
+
+export const availableLanguages: Array<string> = [
+  englishISOCode,
+  italianISOCode,
+  frenchISOCode,
+  russianISOCode,
+];
 
 export const languages: Map<string, Language> = new Map()
-  .set(english, new Language(english, `English`))
-  .set(french, new Language(french, `French`))
-  .set(italian, new Language(italian, `Italian`))
-  .set(russian, new Language(russian, `Russian`));
+  .set(englishISOCode, new Language(englishISOCode, `English`))
+  .set(italianISOCode, new Language(italianISOCode, `Italian`))
+  .set(frenchISOCode, new Language(frenchISOCode, `French`))
+  .set(russianISOCode, new Language(russianISOCode, `Russian`));
