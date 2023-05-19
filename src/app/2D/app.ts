@@ -1,7 +1,7 @@
 import { INSERT_ADJACENT_HTML_POSITIONS } from "../../constants/insertAdjacentHTMLPositions";
 import { App } from "../app";
 import { Debug } from "../debug";
-import { LanguageService } from "../language";
+import { LanguageService } from "../language.service";
 import { Logger } from "../logger";
 import { Menu } from "./components/menu";
 import { pageStructure } from "./constants/2D page structure";
@@ -12,7 +12,7 @@ export class App2D {
   declare _logger: Logger;
   declare _language: LanguageService;
 
-  declare _menu: Menu;
+  #menu!: Menu;
   /**
    *
    */
@@ -28,6 +28,6 @@ export class App2D {
       INSERT_ADJACENT_HTML_POSITIONS.BEFORE_END as InsertPosition,
       pageStructure
     );
-    this._menu = new Menu();
+    this.#menu = new Menu();
   }
 }

@@ -20,7 +20,8 @@ export class Environment implements IEnvironment {
   declare _id: number;
   #name: string;
   #description: string;
-  #isDefault: boolean;
+  #isDefault: boolean = false;
+  #isActive: boolean = false;
 
   declare _mainCharacterStartingPosition: THREE.Vector3;
   declare _mainCharacterStartingRotation: THREE.Euler;
@@ -69,7 +70,7 @@ export class Environment implements IEnvironment {
     this._id = id;
     this.#name = name;
     this.#description = description;
-    this.#isDefault = isDefault;
+    this.isDefault = isDefault;
 
     this._mainCharacterStartingPosition = mainCharacterStartingPosition;
     this._mainCharacterStartingRotation = mainCharacterStartingRotation;
@@ -87,6 +88,35 @@ export class Environment implements IEnvironment {
   }
 
   /**
+   * id property getter
+   */
+  get id(): number {
+    return this._id;
+  }
+
+  /**
+   * isActive property getter
+   */
+  get isActive(): boolean {
+    return this.#isActive;
+  }
+
+  /**
+   * isDefault property setter
+   */
+  set isDefault(value: boolean) {
+    this.#isDefault = value;
+    this.isActive = value;
+  }
+
+  /**
+   * isActive property setter
+   */
+  set isActive(value: boolean) {
+    this.#isActive = value;
+  }
+
+  /**
    * Set app parameters
    * @param app3D app
    */
@@ -95,7 +125,7 @@ export class Environment implements IEnvironment {
     this._scene = this._app3D._scene;
     this._isDebug = this._app3D._debug.getActive();
 
-    this._interactLabel = new InteractLabel(this._app3D);
+    // this._interactLabel = new InteractLabel(this._app3D);
 
     this._backgroundCubeTexturesManager =
       this._app3D._backgroundCubeTexturesManager;
@@ -158,21 +188,14 @@ export class Environment implements IEnvironment {
   }
 
   /**
-   * Retrieve #isDefault parameter
-   * @returns #isDefault parameter
-   */
-  public getIsDefault(): boolean {
-    return this.#isDefault;
-  }
-
-  /**
    * An asset has been loaded.
    * Set it to all the models with the corresponding assetId
    * @param assetId id of the loaded asset
    */
   public setModel(assetId: number): void {
+    debugger;
     [...this._characters, ...this._buildings, ...this._items]
-      .filter((model) => !model._asset && model._assetId === assetId)
+      .filter((model) => !model.asset && model._assetId === assetId)
       .forEach((model) => {
         model.setAsset(assetId);
 
@@ -242,18 +265,20 @@ export class Environment implements IEnvironment {
     if (interactingModels.length === 1) {
       const model: Model = interactingModels[0] as Model;
       model.checkpointColliding = true;
-      !this._interactLabel.isVisible() && this._interactLabel.show(model);
+      // !this._interactLabel.isVisible() && this._interactLabel.show(model);
     } else {
       this._interactableModels.forEach((model) => {
         model.checkpointColliding = false;
-        this._interactLabel.isVisible() && this._interactLabel.hide();
+        // this._interactLabel.isVisible() && this._interactLabel.hide();
       });
     }
   }
 
   public disposeEnvironment(): void {
-    [...this._characters, ...this._buildings, ...this._items].forEach((model) =>
-      model.disposeAsset()
+    [...this._characters, ...this._buildings, ...this._items].forEach(
+      (model) => {
+        model.disposeAsset();
+      }
     );
   }
 }

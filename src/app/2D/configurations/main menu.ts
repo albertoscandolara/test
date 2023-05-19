@@ -125,7 +125,7 @@ export const menuConfig = {
               type: WEB_COMPONENTS_SIGNATURES.AS_BUTTON_ROUND_BACKGROUND_IMAGE,
               attributes: {
                 keys: {
-                  environment: "Courtyard",
+                  environmentId: 1,
                 },
                 svgSignature: SVG_SIGNATURES.HOME_SVG_SIGNATURE,
                 selected: true,
@@ -138,7 +138,7 @@ export const menuConfig = {
               type: WEB_COMPONENTS_SIGNATURES.AS_BUTTON_ROUND_BACKGROUND_IMAGE,
               attributes: {
                 keys: {
-                  environment: "3D Exhibition",
+                  environmentId: 2,
                 },
                 svgSignature: SVG_SIGNATURES.CUBE_SVG_SIGNATURE,
                 selected: false,
@@ -151,7 +151,7 @@ export const menuConfig = {
               type: WEB_COMPONENTS_SIGNATURES.AS_BUTTON_ROUND_BACKGROUND_IMAGE,
               attributes: {
                 keys: {
-                  environment: "Websites",
+                  environmentId: 3,
                 },
                 svgSignature: SVG_SIGNATURES.COMPUTER_SVG_SIGNATURE,
                 selected: false,
@@ -164,7 +164,7 @@ export const menuConfig = {
               type: WEB_COMPONENTS_SIGNATURES.AS_BUTTON_ROUND_BACKGROUND_IMAGE,
               attributes: {
                 keys: {
-                  environment: "About me",
+                  environmentId: 4,
                 },
                 svgSignature: SVG_SIGNATURES.USER_SVG_SIGNATURE,
                 selected: false,

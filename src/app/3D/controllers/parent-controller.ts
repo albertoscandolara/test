@@ -103,7 +103,7 @@ export class ParentController {
       let angle: number = this._move.right
         ? -this._mainCharacterRotationAngle
         : this._mainCharacterRotationAngle;
-      this._mainCharacter._asset.rotateY(angle);
+      (this._mainCharacter.asset as THREE.Object3D).rotateY(angle);
     }
   }
 
@@ -123,7 +123,7 @@ export class ParentController {
       distance = this._mainCharacterTraslationDistance;
     }
 
-    this._mainCharacter._asset.translateZ(distance);
+    (this._mainCharacter.asset as THREE.Object3D).translateZ(distance);
 
     this._mainCharacter.setBoundingBox();
   }

@@ -1,22 +1,21 @@
 import "./interact-label.scss";
 
 import { Logger } from "../../../app/logger";
-import {
-  changeEnvironmentEventEmitter,
-  showInteractionTabEventEmitter,
-} from "../../../app/event-emitter/events";
+import { showInteractionTabEventEmitter } from "../../../app/event-emitter/events";
 import { App3D } from "../app-3D";
-import { LanguageService } from "../../language";
+import { LanguageService } from "../../language.service";
 import { Building } from "../../../models/3D/environment/buildings/building";
 import { Character } from "../../../models/3D/environment/characters/character";
 import { Item } from "../../../models/3D/environment/items/item";
 import { Model } from "../../../models/3D/environment/model";
+import { EnvironmentsService } from "../../environment.service";
 
 export class InteractLabel {
   declare _logger: Logger;
   declare _container: HTMLElement;
   declare _label: HTMLElement;
-  declare _language: LanguageService;
+  declare _languageService: LanguageService;
+  #environmentsService!: EnvironmentsService;
   declare _visible: boolean;
   declare _model: Model | null;
 
@@ -26,7 +25,8 @@ export class InteractLabel {
   constructor(app3D: App3D) {
     this._logger = app3D._logger;
     this._container = app3D._container;
-    this._language = app3D._language;
+    this._languageService = app3D._languageService;
+    this.#environmentsService = app3D._environmentsService;
 
     this.setLabel();
     this.hide();
@@ -88,7 +88,7 @@ export class InteractLabel {
     } else {
       text = `Interact`;
     }
-    text = this._language.translate(text);
+    text = this._languageService.translate(text);
 
     return text;
   }
@@ -149,7 +149,7 @@ export class InteractLabel {
 
     if (this._model._goToEnvironment ?? false) {
       const environmentId: number = this._model._goToEnvironment as number;
-      changeEnvironmentEventEmitter.emit(environmentId);
+      this.#environmentsService.setCurrentEnvironment(environmentId);
     } else if (this._model._goToHTML ?? false) {
       showInteractionTabEventEmitter.emit(this._model);
     }

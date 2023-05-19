@@ -56,7 +56,9 @@ export class Camera {
    * @param model asset according to
    */
   public setCameraPosition(model: Model): void {
-    this._instance.position.copy(model._asset.children[0].position);
+    this._instance.position.copy(
+      (model.asset as THREE.Object3D).children[0].position
+    );
     let cameraOffset: THREE.Vector3 = new THREE.Vector3();
 
     const k: number = 2;

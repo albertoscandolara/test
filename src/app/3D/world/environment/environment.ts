@@ -1,5 +1,3 @@
-// import { EnvironmentsUtils } from './environments-util';
-
 import * as THREE from "three";
 import { App3D } from "../../app-3D";
 import { Light } from "./light";
@@ -54,7 +52,7 @@ export class Environment {
    */
   public setModel(assetId: number) {
     [...this._characters, ...this._buildings, ...this._items]
-      .filter((model) => !model._asset && model._assetId === assetId)
+      .filter((model) => !model.asset && model._assetId === assetId)
       .forEach((model) => model.setAsset(assetId));
   }
 }

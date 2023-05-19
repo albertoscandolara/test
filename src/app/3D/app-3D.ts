@@ -18,7 +18,6 @@ import { World } from "./world/world";
 
 import { canvasSelector, canvasHTMLTemplate } from "../../config/app-3D";
 
-import { EnvironmentsManager } from "../managers/environments-manager";
 import { AssetsManager } from "../managers/assets-manager";
 import { CharactersManager } from "../managers/characters-manager";
 import { BuildingsManager } from "../managers/buildings-manager";
@@ -30,7 +29,8 @@ import { Controller } from "./controllers/controller";
 import { DracoLoader } from "./loaders/dracoLoader";
 import { CubeTextureLoader } from "./loaders/cubeTextureLoader";
 import { BackgroundCubeTexturesManager } from "../managers/background-cube-textures";
-import { LanguageService } from "../language";
+import { LanguageService } from "../language.service";
+import { EnvironmentsService } from "../environment.service";
 import { Model } from "../../models/3D/environment/model";
 import { TouchScreenDevice } from "../touch-screen";
 
@@ -38,7 +38,8 @@ export class App3D {
   declare _debug: Debug;
   declare _touchScreenDevice: TouchScreenDevice;
   declare _logger: Logger;
-  declare _language: LanguageService;
+  declare _languageService: LanguageService;
+  declare _environmentsService: EnvironmentsService;
   declare _gui: GUI;
   declare _container: HTMLElement;
 
@@ -55,7 +56,6 @@ export class App3D {
   declare _controller: Controller;
 
   declare _backgroundCubeTexturesManager: BackgroundCubeTexturesManager;
-  declare _environmentsManager: EnvironmentsManager;
   declare _assetsManager: AssetsManager;
   declare _charactersManager: CharactersManager;
   declare _buildingsManager: BuildingsManager;
@@ -68,7 +68,8 @@ export class App3D {
     this._debug = app._debug;
     this._touchScreenDevice = app._touchScreenDevice;
     this._logger = app._logger;
-    this._language = app._language;
+    this._languageService = app._languageService;
+    this._environmentsService = app._environmentsService;
     this._container = app._appContainer;
     this.setCanvas();
 
@@ -83,7 +84,6 @@ export class App3D {
     this._renderer = new Renderer(this);
 
     this._backgroundCubeTexturesManager = new BackgroundCubeTexturesManager();
-    this._environmentsManager = new EnvironmentsManager();
     this._assetsManager = new AssetsManager();
     this._charactersManager = new CharactersManager();
     this._buildingsManager = new BuildingsManager();
@@ -113,9 +113,7 @@ export class App3D {
     assetLoadedEventEmitter.on((assetId: number) => this.setModel(assetId));
     cubeTextureLoadedEventEmitter.on(() => this.setBackgroundCubeTexture());
 
-    changeEnvironmentEventEmitter.on((environmentId: number) =>
-      this.changeEnvironment(environmentId)
-    );
+    changeEnvironmentEventEmitter.on(() => this.setEnvironment());
     showInteractionTabEventEmitter.on((model: Model) =>
       this.setInteractionTab(model)
     );
@@ -156,10 +154,9 @@ export class App3D {
 
   /**
    * Change world environment
-   * @param {number} environmentId environment id to set
    */
-  public changeEnvironment(environmentId: number): void {
-    this._world.changeEnvironment(environmentId);
+  public setEnvironment(): void {
+    this._world.setEnvironment();
   }
 
   /**

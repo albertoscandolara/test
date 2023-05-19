@@ -4,13 +4,12 @@ import { hamburgerMenuconfig, menuConfig } from "../configurations/main menu";
 import { Logger } from "../../logger";
 import { OutputData } from "../models/as-wc-lib.dto";
 import { DISPATCHED_EVENTS } from "../enums/as-wc-lib";
-import { LanguageService } from "../../language";
-import { languages } from "../../../config/languages";
-import { Language } from "../../../models/language";
+import { LanguageService } from "../../language.service";
 import { hiddenClass } from "../../../constants/classes";
 import { hamburgerMenuContainerClass } from "../constants/2D page structure";
 import { WEB_COMPONENTS_SIGNATURES } from "../enums/web-components-signatures.enum";
 import { getLastChildAsWcLib } from "../helpers/as-wc-lib";
+import { EnvironmentsService } from "../../environment.service";
 
 export class Menu {
   /**
@@ -34,9 +33,14 @@ export class Menu {
   private _logger!: Logger;
 
   /**
-   * Language
+   * Language service
    */
   private _languageService!: LanguageService;
+
+  /**
+   * Environments service
+   */
+  private _environmentsService!: EnvironmentsService;
 
   /**
    * Constructor
@@ -46,8 +50,23 @@ export class Menu {
   constructor() {
     this._logger = new Logger();
     this._languageService = new LanguageService();
+    this._environmentsService = new EnvironmentsService();
 
     this._setHamburgerMenuHTMLElement();
+  }
+
+  /**
+   * _mainMenuHTMLElement property setter
+   */
+  set mainMenuHTMLElement(value: HTMLElement | null) {
+    if (!value) {
+      (this._mainMenuHTMLElement as HTMLElement).remove();
+      this._mainMenuHTMLElement = value;
+      return;
+    }
+
+    this._mainMenuHTMLElement = value;
+    (this._mainMenuHTMLElement as HTMLElement).classList.add("main-menu");
   }
 
   /**
@@ -110,9 +129,10 @@ export class Menu {
   private _setMainMenu(): void {
     const container: HTMLElement = document.body;
     let config = JSON.parse(JSON.stringify(menuConfig));
+    config = this._environmentsService.selectCurrentEnvironmentAsWCLib(config);
     config = this._languageService.selectCurrentLanguageAsWCLib(config);
     config = this._languageService.translateAsWCLibConfiguration(config);
-    this._mainMenuHTMLElement = createFromConfig(config, container);
+    this.mainMenuHTMLElement = createFromConfig(config, container);
 
     if (!this._mainMenuHTMLElement) {
       this._logger.error(
@@ -121,7 +141,6 @@ export class Menu {
       return;
     }
 
-    (this._mainMenuHTMLElement as HTMLElement).classList.add("main-menu");
     this._addEventListeners();
   }
 
@@ -146,7 +165,6 @@ export class Menu {
   private _handleMainMenuClick = (data: any): void => {
     const { detail: outputData }: { detail: OutputData } = data;
     const clickedAsWcLib: any = [].concat(getLastChildAsWcLib(outputData))[0];
-
     if (clickedAsWcLib.type === WEB_COMPONENTS_SIGNATURES.AS_HEADER_CLOSE) {
       this._toggleMainMenuVisibility(false);
     } else if (
@@ -157,25 +175,19 @@ export class Menu {
         clickedAsWcLib.attributes.keys;
       if (keysAttribute) {
         const ISOCodeProperty: string = "ISOCode";
-        const environmentProperty: string = "environment";
+        const environmentIdProperty: string = "environmentId";
         if (keysAttribute.hasOwnProperty(ISOCodeProperty)) {
           const ISOCode: string = keysAttribute[ISOCodeProperty];
           this._languageService.setLanguage(ISOCode);
           this._resetMainMenu();
-        } else if (keysAttribute.hasOwnProperty(environmentProperty)) {
-          const environment: string = keysAttribute[environmentProperty];
+        } else if (keysAttribute.hasOwnProperty(environmentIdProperty)) {
+          const environmentId: number = +keysAttribute[environmentIdProperty];
+          this._environmentsService.setCurrentEnvironment(environmentId);
           this._resetMainMenu();
         }
       }
     }
   };
-
-  /**
-   * Handle change area request
-   * @param data
-   * @returns {void}
-   */
-  private _handleMainMenuChangeArea = (data: OutputData): void => {};
 
   /**
    * Handle change language request
@@ -184,6 +196,6 @@ export class Menu {
    */
   private _resetMainMenu = (): void => {
     this._toggleMainMenuVisibility(false);
-    this._mainMenuHTMLElement = null;
+    this.mainMenuHTMLElement = null;
   };
 }

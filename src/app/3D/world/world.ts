@@ -1,14 +1,11 @@
 import * as THREE from "three";
 
-import { EnvironmentsUtils } from "./utils/environments";
-
 import { App3D } from "../app-3D";
 import { Logger } from "../../logger";
 import { Sizes } from "../utils/sizes";
 import { Camera } from "../camera";
 
 import { BackgroundCubeTexturesManager } from "../../managers/background-cube-textures";
-import { EnvironmentsManager } from "../../../app/managers/environments-manager";
 import { AssetsManager } from "../../../app/managers/assets-manager";
 import { CharactersManager } from "../../../app/managers/characters-manager";
 import { BuildingsManager } from "../../../app/managers/buildings-manager";
@@ -23,19 +20,18 @@ import { Item } from "../../../models/3D/environment/items/item";
 
 import { Controller } from "../controllers/controller";
 import { AnimationNames } from "../../../models/animations.dto";
+import { EnvironmentsService } from "../../environment.service";
 
 export class World {
   declare _app3D: App3D;
   declare _logger: Logger;
 
   declare _backgroundCubeTexturesManager: BackgroundCubeTexturesManager;
-  declare _environmentsManager: EnvironmentsManager;
+  #environmentsService!: EnvironmentsService;
   declare _assetsManager: AssetsManager;
   declare _charactersManager: CharactersManager;
   declare _buildingsManager: BuildingsManager;
   declare _itemsManager: ItemsManager;
-
-  declare _environmentsUtils: EnvironmentsUtils;
 
   declare _canvas: HTMLCanvasElement;
   declare _instance: THREE.WebGLRenderer;
@@ -61,7 +57,7 @@ export class World {
     // Resources managers
     this._backgroundCubeTexturesManager =
       this._app3D._backgroundCubeTexturesManager;
-    this._environmentsManager = this._app3D._environmentsManager;
+    this.#environmentsService = this._app3D._environmentsService;
     this._assetsManager = this._app3D._assetsManager;
     this._buildingsManager = this._app3D._buildingsManager;
     this._charactersManager = this._app3D._charactersManager;
@@ -118,9 +114,7 @@ export class World {
     }
 
     {
-      // Set initial environment
-      const environment = this._environmentsManager.getDefaultEnvironment();
-      this.changeEnvironment(environment._id);
+      this.setEnvironment();
     }
 
     if (app3D._debug.getActive()) {
@@ -137,7 +131,7 @@ export class World {
    */
   public setModel(assetId: number) {
     if (
-      !this._mainCharacter._asset &&
+      !this._mainCharacter.asset &&
       this._mainCharacter._assetId === assetId
     ) {
       this._mainCharacter.setAsset(assetId);
@@ -147,11 +141,13 @@ export class World {
 
       this._environment.setMainCharacter(this._mainCharacter as MainCharacter);
     } else if (
-      !this._interactionCheckpoint._asset &&
+      !this._interactionCheckpoint.asset &&
       this._interactionCheckpoint._assetId === assetId
     ) {
       this._interactionCheckpoint.setAsset(assetId);
-      this._scene.remove(this._interactionCheckpoint._asset);
+      this._scene.remove(
+        this._interactionCheckpoint.asset as unknown as THREE.Object3D
+      );
     }
 
     this._environment.setModel(assetId);
@@ -190,24 +186,17 @@ export class World {
 
   /**
    * Change environment
+   * @return {void}
    */
-  public changeEnvironment(id: number): void {
+  public setEnvironment(): void {
     if (this._environment) {
-      if (this._environment?._id === id) {
-        this._logger.warn(
-          `${this.constructor.name} - current environment has same id of the requested environment. Do not switch.`
-        );
-
-        return;
-      }
-
       this._environment.disposeEnvironment();
     }
 
-    this._environment = this._environmentsManager.getEnvironmentWithId(id);
+    this._environment = this.#environmentsService.getActiveEnvironment();
     this._environment.setAppParams(this._app3D);
 
-    if (this._mainCharacter._asset) {
+    if (this._mainCharacter.asset) {
       this._environment.setMainCharacter(this._mainCharacter as MainCharacter);
     }
 

@@ -36,7 +36,7 @@ export class Model {
   declare _height: number;
   declare _boundingBox: THREE.Box3;
   declare _assetId: number;
-  declare _asset: THREE.Object3D;
+  #asset: THREE.Object3D | null = null;
   declare _initialPosition: THREE.Vector3;
   declare _rotation: THREE.Euler;
 
@@ -84,13 +84,6 @@ export class Model {
       walkForward: null,
       walkBackward: null,
     };
-
-    this._currentAnimationName$ = new BehaviorSubject<AnimationNames>(
-      AnimationNames.none
-    );
-    this._currentAnimationName$
-      .pipe(map(() => this.playAnimation()))
-      .subscribe();
 
     this._assetsManager = new AssetsManager();
     this._loader = new DracoLoader();
@@ -158,6 +151,13 @@ export class Model {
   }
 
   /**
+   * asset property getter
+   */
+  get asset(): THREE.Object3D | null {
+    return this.#asset;
+  }
+
+  /**
    * _checkpointColliding property setter.
    * Toggle model bounding box color
    */
@@ -165,12 +165,12 @@ export class Model {
     if (this._checkpointColliding === value) return;
 
     this._checkpointColliding = value;
-    this.setBoxHelperColor();
+    this._setBoxHelperColor();
 
     if (!this._checkpoint) return;
 
     (this._checkpoint as Item).checkpointColliding = value;
-    (this._checkpoint as Item).setBoxHelperColor();
+    (this._checkpoint as Item)._setBoxHelperColor();
 
     // Set greet animation if model is interacting, idle otherwise
     if (
@@ -205,7 +205,7 @@ export class Model {
    */
   public setAsset(assetId: number): void {
     const assetObj: Asset = this._assetsManager.getAssetWithId(assetId);
-    this._asset = SkeletonUtils.clone(assetObj._asset) as THREE.Object3D;
+    this.#asset = SkeletonUtils.clone(assetObj._asset) as THREE.Object3D;
 
     this._logger.log(
       `${this.constructor.name} - Asset with id '${this._assetId}' cloned`,
@@ -218,19 +218,33 @@ export class Model {
     this.setRotation(this._rotation);
 
     // Set animation tools
-    this.setAnimationMixer(this._asset);
+    this._setAnimationSubscription();
+    this.setAnimationMixer(this.#asset);
     this.setAnimationActions(assetObj._animations);
     this._currentAnimationName$.next(AnimationNames.idle);
 
     this.setBoundingBox();
-    this.setDebugHelperTools();
+    this._setDebugHelperTools();
 
     if (this._camera) {
       this._camera.setCameraPosition(this);
-      this._asset.add(this._camera._instance);
+      this.#asset.add(this._camera._instance);
     }
 
-    this._scene.add(this._asset);
+    this._scene.add(this.#asset);
+  }
+
+  /**
+   * Subscribe to animations name subject
+   * @returns {void}
+   */
+  private _setAnimationSubscription(): void {
+    this._currentAnimationName$ = new BehaviorSubject<AnimationNames>(
+      AnimationNames.none
+    );
+    this._currentAnimationName$
+      .pipe(map(() => this.playAnimation()))
+      .subscribe();
   }
 
   /**
@@ -252,7 +266,7 @@ export class Model {
   public setInitialPosition(
     initialPosition: THREE.Vector3 = new THREE.Vector3()
   ): void {
-    this._asset.position.add(
+    (this.asset as THREE.Object3D).position.add(
       new THREE.Vector3(
         initialPosition.x,
         initialPosition.y < 0 ? 0 : initialPosition.y,
@@ -265,9 +279,9 @@ export class Model {
    * Set model rotation
    */
   public setRotation(euler: THREE.Euler = new THREE.Euler()): void {
-    this._asset.rotateOnAxis(xAxis, euler.x);
-    this._asset.rotateOnAxis(yAxis, euler.y);
-    this._asset.rotateOnAxis(zAxis, euler.z);
+    (this.asset as THREE.Object3D).rotateOnAxis(xAxis, euler.x);
+    (this.asset as THREE.Object3D).rotateOnAxis(yAxis, euler.y);
+    (this.asset as THREE.Object3D).rotateOnAxis(zAxis, euler.z);
   }
 
   /**
@@ -275,7 +289,7 @@ export class Model {
    */
   public setBoundingBox(): void {
     const newBoundingBox: THREE.Box3 = new THREE.Box3().expandByObject(
-      this._asset
+      this.asset as THREE.Object3D
     );
     this._boundingBox = newBoundingBox;
 
@@ -348,75 +362,75 @@ export class Model {
     // Play new one
     switch (this._currentAnimationName$.value) {
       case AnimationNames.none:
-        this.playAnimationNone();
+        this._playAnimationNone();
         break;
       case AnimationNames.greet:
-        this.playAnimationGreet();
+        this._playAnimationGreet();
         break;
       case AnimationNames.idle:
-        this.playAnimationIdle();
+        this._playAnimationIdle();
         break;
       case AnimationNames.run:
-        this.playAnimationRun();
+        this._playAnimationRun();
         break;
       case AnimationNames.talk:
-        this.playAnimationTalk();
+        this._playAnimationTalk();
         break;
       case AnimationNames.walkBackward:
-        this.playAnimationWalkBackward();
+        this._playAnimationWalkBackward();
         break;
       case AnimationNames.walkForward:
-        this.playAnimationWalkForward();
+        this._playAnimationWalkForward();
         break;
       default:
-        this.playAnimationIdle();
+        this._playAnimationIdle();
     }
   }
 
   /**
    * Manage model no animation
    */
-  private playAnimationNone(): void {}
+  private _playAnimationNone(): void {}
 
   /**
    * Manage model greet animation
    */
-  private playAnimationGreet(): void {
+  private _playAnimationGreet(): void {
     this._animationActions.greet?.play();
   }
 
   /**
    * Manage model idle animation
    */
-  private playAnimationIdle(): void {
+  private _playAnimationIdle(): void {
     this._animationActions.idle?.play();
   }
 
   /**
    *  Manage model run animation
    */
-  private playAnimationRun(): void {
+  private _playAnimationRun(): void {
     this._animationActions.run?.play();
   }
 
   /**
    * Manage model talk animation
    */
-  private playAnimationTalk(): void {
+  private _playAnimationTalk(): void {
     this._animationActions.talk?.play();
   }
 
   /**
    * Manage model walk backward animation
    */
-  private playAnimationWalkBackward(): void {
+  private _playAnimationWalkBackward(): void {
     this._animationActions.walkBackward?.play();
   }
 
   /**
    * Manage model walk forward animation
    */
-  private playAnimationWalkForward(): void {
+  private _playAnimationWalkForward(): void {
     this._animationActions.walkForward?.play();
   }
 
@@ -439,17 +453,17 @@ export class Model {
   /**
    * Set helper tools to show in debug mode
    */
-  private setDebugHelperTools(): void {
+  private _setDebugHelperTools(): void {
     if (!this._isDebug) return;
 
-    this.setBoundingBoxHelper();
-    this.setModelAxesHelper();
+    this._setBoundingBoxHelper();
+    this._setModelAxesHelper();
   }
 
   /**
    * Set bounding axes helper
    */
-  private setModelAxesHelper(): void {
+  private _setModelAxesHelper(): void {
     const height: number = Math.min(
       this._boundingBox.max.x - this._boundingBox.min.x,
       this._boundingBox.max.y - this._boundingBox.min.y,
@@ -457,18 +471,21 @@ export class Model {
     );
 
     const axesHelper = new THREE.AxesHelper(height);
-    this._asset.add(axesHelper);
+    (this.asset as THREE.Object3D).add(axesHelper);
   }
 
   /**
    * Set bounding box debug helper
    */
-  private setBoundingBoxHelper(): void {
-    this._boxHelper = new THREE.BoxHelper(this._asset, 0xffff00);
-    this._asset.attach(this._boxHelper);
+  private _setBoundingBoxHelper(): void {
+    this._boxHelper = new THREE.BoxHelper(
+      this.asset as THREE.Object3D,
+      0xffff00
+    );
+    (this.asset as THREE.Object3D).attach(this._boxHelper);
   }
 
-  private setBoxHelperColor(): void {
+  private _setBoxHelperColor(): void {
     if (!this._boxHelper) return;
 
     const defaultColor: string = COLORS.YELLOW;
@@ -503,9 +520,9 @@ export class Model {
     this._currentAnimationName$.unsubscribe();
 
     let assetsToDispose: Array<THREE.Object3D> = [];
-    assetsToDispose.push(this._asset);
+    assetsToDispose.push(this.asset as THREE.Object3D);
     if (this._checkpoint) {
-      assetsToDispose.push(this._checkpoint._asset);
+      assetsToDispose.push(this._checkpoint.asset as THREE.Object3D);
     }
 
     assetsToDispose.forEach((asset) => {
@@ -534,12 +551,17 @@ export class Model {
 
       this._scene.remove(asset);
     });
+
+    this.#asset = null;
+    if (this._checkpoint) {
+      this._checkpoint.#asset = null;
+    }
   }
 
   /**
    * Update model
    */
   public update(): void {
-    this._asset && this._animationMixer.update(this._time._delta * 0.001);
+    this.#asset && this._animationMixer.update(this._time._delta * 0.001);
   }
 }

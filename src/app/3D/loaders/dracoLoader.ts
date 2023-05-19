@@ -68,8 +68,6 @@ export class DracoLoader {
       asset.setOffsetPosition();
 
       asset._loadingStatus = AssetLoadingStatus.Loaded;
-
-      // Emit a value to say it's loaded
       assetLoadedEventEmitter.emit(asset._id);
     });
   }

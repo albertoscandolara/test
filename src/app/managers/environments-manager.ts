@@ -1,7 +1,7 @@
-import { Logger } from '../logger';
+import { Logger } from "../logger";
 
-import { environments } from '../../config/environments';
-import { Environment } from '../../models/3D/environment/environment';
+import { environments } from "../../config/environments";
+import { Environment } from "../../models/3D/environment/environment";
 
 let instance!: EnvironmentsManager;
 
@@ -36,11 +36,15 @@ export class EnvironmentsManager {
   private checkForDuplicateIds(): boolean {
     let parsedEnvironments: Set<number> = new Set();
     const hasDuplicates: boolean = environments.some((environment) => {
-      return parsedEnvironments.size === parsedEnvironments.add(environment._id).size;
+      return (
+        parsedEnvironments.size === parsedEnvironments.add(environment._id).size
+      );
     });
 
     if (hasDuplicates) {
-      this._logger.error(`${this.constructor.name} - There are environments with duplicate ids`);
+      this._logger.error(
+        `${this.constructor.name} - There are environments with duplicate ids`
+      );
     }
 
     return hasDuplicates;
@@ -65,13 +69,17 @@ export class EnvironmentsManager {
 
     let environment!: Environment;
 
-    const environments: Array<Environment> = this._environments.filter((environment) => environment._id === id);
+    const environments: Array<Environment> = this._environments.filter(
+      (environment) => environment._id === id
+    );
 
     if (environments.length === 0) {
       this._logger.error(`No environments with id '${id}' found.`);
     } else {
       if (environments.length > 1) {
-        this._logger.warn(`More environments with id '${id}' found. Got the first one.`);
+        this._logger.warn(
+          `More environments with id '${id}' found. Got the first one.`
+        );
       }
       environment = environments[0];
     }
@@ -86,7 +94,9 @@ export class EnvironmentsManager {
   public getDefaultEnvironment(): Environment {
     this.checkForNoEnvironments();
 
-    let environment: Environment = environments.find((environment) => environment.getIsDefault()) as Environment;
+    let environment: Environment = environments.find(
+      (environment) => environment.isDefault
+    ) as Environment;
 
     return environment;
   }
