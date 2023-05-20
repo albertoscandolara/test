@@ -175,7 +175,7 @@ export class Environment implements IEnvironment {
    */
   public setMainCharacter(mainCharacter: MainCharacter): void {
     this._mainCharacter = mainCharacter;
-    this._mainCharacter.setInitialPosition(this._mainCharacterStartingPosition);
+    this._mainCharacter.setPosition(this._mainCharacterStartingPosition);
     this._mainCharacter.setRotation(this._mainCharacterStartingRotation);
   }
 
@@ -193,7 +193,6 @@ export class Environment implements IEnvironment {
    * @param assetId id of the loaded asset
    */
   public setModel(assetId: number): void {
-    debugger;
     [...this._characters, ...this._buildings, ...this._items]
       .filter((model) => !model.asset && model._assetId === assetId)
       .forEach((model) => {
@@ -201,7 +200,11 @@ export class Environment implements IEnvironment {
 
         // Set checkpoint for interactable models
         if (model._isInteractable) {
-          this._interactableModels.push(model);
+          const alreadyAddedToInteractableModels: boolean =
+            this._interactableModels.some((m: Model) => m.id === model.id);
+          if (!alreadyAddedToInteractableModels) {
+            this._interactableModels.push(model);
+          }
 
           (model._checkpoint as Item).setAppParams(this._app3D);
           const checkpointAssetId: number =
@@ -213,32 +216,33 @@ export class Environment implements IEnvironment {
 
   /**
    * Set lights
+   * @returns {void}
    */
   public setLights(): void {
     this._lights.forEach((light) => {
-      light._light.position.set(
-        light._position.x,
-        light._position.y,
-        light._position.z
-      );
+      if (light.light) {
+        const [x, y, z]: any = light._position.toArray();
+        light.light.position.set(x, y, z);
 
-      this._scene.add(light._light);
+        //Set up shadow properties for the light
+        if (light.light instanceof THREE.DirectionalLight) {
+          //light.light.castShadow = true;
+          // light.light.shadow.mapSize.width = 2024; // default
+          // light.light.shadow.mapSize.height = 2024; // default
+          // light.light.shadow.camera.near = 2; // default
+          // light.light.shadow.camera.far = 1000; // default
+          // const helper = new THREE.CameraHelper(light.light.shadow.camera);
+          // this._scene.add(helper);
+        }
 
-      //Set up shadow properties for the light
-      if (light._light instanceof THREE.DirectionalLight) {
-        //light._light.castShadow = true;
-        // light._light.shadow.mapSize.width = 2024; // default
-        // light._light.shadow.mapSize.height = 2024; // default
-        // light._light.shadow.camera.near = 2; // default
-        // light._light.shadow.camera.far = 1000; // default
-        // const helper = new THREE.CameraHelper(light._light.shadow.camera);
-        // this._scene.add(helper);
+        this._scene.add(light.light);
       }
     });
   }
 
   /**
    * Set background cube texture
+   * @returns {void}
    */
   public setBackgroundCubeTexture(): void {
     this._scene.background = this._backgroundCubeTexture._cubeTexture;
@@ -246,6 +250,7 @@ export class Environment implements IEnvironment {
 
   /**
    * Update all elements in the scene
+   * @returns {void}
    */
   public update(): void {
     [...this._characters, ...this._buildings, ...this._items].forEach((model) =>
@@ -274,11 +279,36 @@ export class Environment implements IEnvironment {
     }
   }
 
+  /**
+   * Dispose environment elements
+   * @returns {void}
+   */
   public disposeEnvironment(): void {
+    this._disposeEnvironmentModels();
+    this._disposeEnvironmentLights();
+  }
+
+  /**
+   * Dispose environment models
+   * @returns {void}
+   */
+  private _disposeEnvironmentModels(): void {
     [...this._characters, ...this._buildings, ...this._items].forEach(
       (model) => {
         model.disposeAsset();
       }
     );
+  }
+
+  /**
+   * Dispose environment lights
+   * @returns {void}
+   */
+  private _disposeEnvironmentLights(): void {
+    this._lights.forEach((light) => {
+      if (light.light) {
+        this._scene.remove(light.light);
+      }
+    });
   }
 }

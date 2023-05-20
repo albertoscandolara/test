@@ -188,7 +188,7 @@ export class World {
    * Change environment
    * @return {void}
    */
-  public setEnvironment(): void {
+  public setEnvironment(resetMainCharacterPosition: boolean = true): void {
     if (this._environment) {
       this._environment.disposeEnvironment();
     }
@@ -198,6 +198,14 @@ export class World {
 
     if (this._mainCharacter.asset) {
       this._environment.setMainCharacter(this._mainCharacter as MainCharacter);
+      if (resetMainCharacterPosition) {
+        this._mainCharacter.setPosition(
+          this._environment._mainCharacterStartingPosition
+        );
+        this._mainCharacter.setRotation(
+          this._environment._mainCharacterStartingRotation
+        );
+      }
     }
 
     this._environment.loadBackgroundCubeTexture();

@@ -29,7 +29,7 @@ export const assets: Array<Asset> = [
     "Louvre",
     2300,
     "Louvre museum",
-    new THREE.Vector3(),
+    new THREE.Vector3(0, 0, 0),
     new THREE.Euler(0, Math.PI / 2, 0),
     `${buildingsFolder}/louvre/scene.gltf`,
     AssetType.DRACO,

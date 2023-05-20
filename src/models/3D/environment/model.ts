@@ -214,7 +214,7 @@ export class Model {
 
     // Set model physical properties
     this.setScale();
-    this.setInitialPosition(this._initialPosition);
+    this.setPosition(this._initialPosition);
     this.setRotation(this._rotation);
 
     // Set animation tools
@@ -261,27 +261,36 @@ export class Model {
   }
 
   /**
-   * Set initial position
+   * Set asset position
+   * @param {THREE.Vector3} vector3 3D vector
+   * @returns {void}
    */
-  public setInitialPosition(
-    initialPosition: THREE.Vector3 = new THREE.Vector3()
-  ): void {
-    (this.asset as THREE.Object3D).position.add(
-      new THREE.Vector3(
-        initialPosition.x,
-        initialPosition.y < 0 ? 0 : initialPosition.y,
-        initialPosition.z
-      )
-    );
+  public setPosition(vector3: THREE.Vector3): void {
+    if (!this.#asset) {
+      this._logger.warn(
+        `${this.constructor.name} - Model ${this._id} does not have asset. Can't set position.`
+      );
+      return;
+    }
+
+    const [x, y, z]: any = vector3.toArray();
+    this.#asset.position.set(x, y > 0 ? y : 0.05, z);
   }
 
   /**
    * Set model rotation
+   * @returns {void}
    */
   public setRotation(euler: THREE.Euler = new THREE.Euler()): void {
-    (this.asset as THREE.Object3D).rotateOnAxis(xAxis, euler.x);
-    (this.asset as THREE.Object3D).rotateOnAxis(yAxis, euler.y);
-    (this.asset as THREE.Object3D).rotateOnAxis(zAxis, euler.z);
+    if (!this.#asset) {
+      this._logger.warn(
+        `${this.constructor.name} - Model ${this._id} does not have asset. Can't set rotation.`
+      );
+      return;
+    }
+
+    const [x, y, z]: any = euler.toArray();
+    this.#asset.rotation.set(x, y, z);
   }
 
   /**
