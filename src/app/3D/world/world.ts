@@ -14,7 +14,7 @@ import { ItemsManager } from "../../../app/managers/items-manager";
 import { DracoLoader } from "../loaders/dracoLoader";
 import { Environment } from "../../../models/3D/environment/environment";
 import { Model } from "../../../models/3D/environment/model";
-import { MainCharacter } from "../../../models/3D/environment/characters/main-character";
+import { MainCharacter } from "../../../models/3D/environment/characters/main-character/main-character";
 import { Character } from "../../../models/3D/environment/characters/character";
 import { Item } from "../../../models/3D/environment/items/item";
 

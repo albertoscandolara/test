@@ -9,39 +9,71 @@ import { Character } from "../../../models/3D/environment/characters/character";
 import { Item } from "../../../models/3D/environment/items/item";
 import { Model } from "../../../models/3D/environment/model";
 import { EnvironmentsService } from "../../environment.service";
+import { INSERT_ADJACENT_HTML_POSITIONS } from "../../../constants/insertAdjacentHTMLPositions";
+import { DOM_EVENTS } from "../../enums/DOMEevents";
 
-export class InteractLabel {
+export class InteractionLabel {
   declare _logger: Logger;
   declare _container: HTMLElement;
   declare _label: HTMLElement;
   declare _languageService: LanguageService;
   #environmentsService!: EnvironmentsService;
   declare _visible: boolean;
-  declare _model: Model | null;
+  #model: Model;
 
   /**
    * Constructor
    */
-  constructor(app3D: App3D) {
-    this._logger = app3D._logger;
-    this._container = app3D._container;
-    this._languageService = app3D._languageService;
-    this.#environmentsService = app3D._environmentsService;
+  constructor(model: Model) {
+    this._logger = new Logger();
+    this._languageService = new LanguageService();
+    this.#environmentsService = new EnvironmentsService();
+    this.#model = model;
 
-    this.setLabel();
-    this.hide();
+    this._show();
 
     this._logger.log(`${this.constructor.name} class instantiated:`, this);
   }
 
   /**
-   * Visibility setter
+   * Hide label
    */
-  set visible(bool: boolean) {
-    this._visible = bool;
-    this._visible
-      ? this._label.classList.remove("hidden")
-      : this._label.classList.add("hidden");
+  public hide(): void {
+    this._label.removeEventListener(DOM_EVENTS.CLICK, this.interact);
+    this._label.remove();
+  }
+
+  /**
+   * Show interaction label
+   * @returns {void}
+   */
+  private _show(): void {
+    const markup: string = this.getLabelMarkup();
+    const container: HTMLElement = document.body;
+    container.insertAdjacentHTML(
+      INSERT_ADJACENT_HTML_POSITIONS.BEFORE_END as InsertPosition,
+      markup
+    );
+
+    this._label = container.querySelector(
+      ".interactable-label-container"
+    ) as HTMLElement;
+
+    this._setEventListeners();
+  }
+
+  /**
+   * Set label event listeners
+   * @returns {void}
+   */
+  private _setEventListeners(): void {
+    if (!this._label) {
+      return;
+    }
+
+    this._label.addEventListener(DOM_EVENTS.CLICK, () => {
+      this.interact();
+    });
   }
 
   /**
@@ -50,25 +82,13 @@ export class InteractLabel {
    */
   private getLabelMarkup(): string {
     return `
-    <div class="interactable-label-container" style="">
+    <div class="interactable-label-container">
       <div class="inner-interactable-label-container">
           <img class="interactable-label-img">
-          <span class="interactable-label-text"></span>
+          <span class="interactable-label-text">${this._getLabelText()}</span>
       </div>
     </div>
   `;
-  }
-
-  /**
-   * Set label markup
-   */
-  private setLabel(): void {
-    const markup: string = this.getLabelMarkup();
-    this._container.insertAdjacentHTML("beforeend", markup);
-
-    this._label = this._container.querySelector(
-      ".interactable-label-container"
-    ) as HTMLElement;
   }
 
   /**
@@ -76,14 +96,14 @@ export class InteractLabel {
    * @param model model interacting with main character
    * @returns string text
    */
-  private getLabelText(): string {
+  private _getLabelText(): string {
     let text: string = "";
 
-    if (this._model instanceof Building) {
+    if (this.#model instanceof Building) {
       text = `Enter this building`;
-    } else if (this._model instanceof Character) {
+    } else if (this.#model instanceof Character) {
       text = `Talk to this character`;
-    } else if (this._model instanceof Item) {
+    } else if (this.#model instanceof Item) {
       text = `Use this item`;
     } else {
       text = `Interact`;
@@ -94,64 +114,21 @@ export class InteractLabel {
   }
 
   /**
-   * Show label
-   * @param model model interacting with main character
-   */
-  public show(model: Model): void {
-    this._model = model;
-    const labelText: string = this.getLabelText();
-    (
-      this._label.querySelector(".interactable-label-text") as HTMLElement
-    ).textContent = labelText;
-
-    this._label.addEventListener("click", () => {
-      this.interact();
-    });
-    this.visible = true;
-  }
-
-  /**
-   * Hide label
-   */
-  public hide(): void {
-    this._model = null;
-    this._label.removeEventListener("click", this.interact);
-    this.visible = false;
-  }
-
-  /**
-   * Dispose label
-   */
-  public dispose(): void {
-    this._label.remove();
-  }
-
-  /**
-   * Returns label visibility
-   * @returns boolean representing visibility
-   */
-  public isVisible(): boolean {
-    return this._visible;
-  }
-
-  /**
    * Callback function to invoke for model interaction
    */
   public interact(): void {
-    if (!this._model) {
+    if (!this.#model) {
       this._logger.warn(
         `${this.constructor.name} Requesting interaction, but model is not set. Do not emit`
       );
       return;
     }
 
-    this.dispose();
-
-    if (this._model._goToEnvironment ?? false) {
-      const environmentId: number = this._model._goToEnvironment as number;
+    if (this.#model._goToEnvironment ?? false) {
+      const environmentId: number = this.#model._goToEnvironment as number;
       this.#environmentsService.setCurrentEnvironment(environmentId);
-    } else if (this._model._goToHTML ?? false) {
-      showInteractionTabEventEmitter.emit(this._model);
+    } else if (this.#model._goToHTML ?? false) {
+      showInteractionTabEventEmitter.emit(this.#model);
     }
   }
 }

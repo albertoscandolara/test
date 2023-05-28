@@ -2,14 +2,14 @@ import * as THREE from "three";
 import { Logger } from "../../../app/logger";
 import { Building } from "./buildings/building";
 import { Character } from "./characters/character";
-import { MainCharacter } from "./characters/main-character";
+import { MainCharacter } from "./characters/main-character/main-character";
 import { Item } from "./items/item";
 import { Light } from "../light";
 import { Floor } from "./floors/floor";
 import { App3D } from "../../../app/3D/app-3D";
 import { BackgroundCubeTexture } from "./backgrounds/background";
 import { BackgroundCubeTexturesManager } from "../../../app/managers/background-cube-textures";
-import { InteractLabel } from "../../../app/3D/interact-label/interact-label";
+import { InteractionLabel } from "../../../app/3D/interact-label/interact-label";
 import { Model } from "./model";
 
 export interface IEnvironment {}
@@ -45,7 +45,7 @@ export class Environment implements IEnvironment {
 
   declare _interactableModels: Array<Model>;
   // Interact label
-  declare _interactLabel: InteractLabel;
+  declare _interactLabel: InteractionLabel;
 
   /**
    * Constructor
@@ -257,25 +257,8 @@ export class Environment implements IEnvironment {
       model.update()
     );
 
-    if (!this._mainCharacter) return;
-
-    const interactingModels: Array<Model> = this._interactableModels.filter(
-      (model) => {
-        return (model._checkpoint as Item)._boundingBox?.intersectsBox(
-          this._mainCharacter._boundingBox
-        );
-      }
-    );
-
-    if (interactingModels.length === 1) {
-      const model: Model = interactingModels[0] as Model;
-      model.checkpointColliding = true;
-      // !this._interactLabel.isVisible() && this._interactLabel.show(model);
-    } else {
-      this._interactableModels.forEach((model) => {
-        model.checkpointColliding = false;
-        // this._interactLabel.isVisible() && this._interactLabel.hide();
-      });
+    if (this._mainCharacter) {
+      this._mainCharacter.handleInteractionLabel(this._interactableModels);
     }
   }
 

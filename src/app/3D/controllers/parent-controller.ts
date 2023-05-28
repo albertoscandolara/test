@@ -1,5 +1,5 @@
 import { DOM_EVENTS } from "../../enums/DOMEevents";
-import { MainCharacter } from "../../../models/3D/environment/characters/main-character";
+import { MainCharacter } from "../../../models/3D/environment/characters/main-character/main-character";
 import { AnimationNames } from "../../../models/animations.dto";
 import { Logger } from "../../logger";
 import { App3D } from "../app-3D";
