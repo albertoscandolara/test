@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { Logger } from "../logger";
+import { LoggerService } from "../logger.service";
 import { App3D } from "./app-3D";
 import { Sizes } from "./utils/sizes";
 
@@ -11,7 +11,7 @@ import { Model } from "../../models/3D/environment/model";
 import { yAxis, zAxis } from "../../config/axes";
 
 export class Camera {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
   declare _gui: GUI;
 
   declare _canvas: HTMLCanvasElement;

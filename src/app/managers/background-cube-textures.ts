@@ -1,4 +1,4 @@
-import { Logger } from "../logger";
+import { LoggerService } from "../logger.service";
 
 import { backgroundCubeTextures } from "../../config/backgrounds";
 import { BackgroundCubeTexture } from "../../models/3D/environment/backgrounds/background";
@@ -6,7 +6,7 @@ import { BackgroundCubeTexture } from "../../models/3D/environment/backgrounds/b
 let instance!: BackgroundCubeTexturesManager;
 
 export class BackgroundCubeTexturesManager {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
   declare _backgroundCubeTextures: Array<BackgroundCubeTexture>;
 
   /**
@@ -19,7 +19,7 @@ export class BackgroundCubeTexturesManager {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     this._backgroundCubeTextures = backgroundCubeTextures;
 

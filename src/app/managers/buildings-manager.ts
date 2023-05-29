@@ -1,14 +1,14 @@
-import { Logger } from '../logger';
+import { LoggerService } from "../logger.service";
 
-import { buildings } from '../../config/buildings';
-import { AssetsManager } from './assets-manager';
-import { Building } from '../../models/3D/environment/buildings/building';
-import { Asset, AssetCategory } from '../../models/3D/environment/asset';
+import { buildings } from "../../config/buildings";
+import { AssetsManager } from "./assets-manager";
+import { Building } from "../../models/3D/environment/buildings/building";
+import { Asset, AssetCategory } from "../../models/3D/environment/asset";
 
 let instance!: BuildingsManager;
 
 export class BuildingsManager {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
   declare _assetsManager: AssetsManager;
   declare _buildings: Array<Building>;
   declare _assets: Array<Asset>;
@@ -23,14 +23,16 @@ export class BuildingsManager {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     if (this.checkForDuplicateIds()) return;
 
     this._buildings = buildings;
 
     this._assetsManager = new AssetsManager();
-    this._assets = this._assetsManager.getAssetsWithCategory(AssetCategory.Building);
+    this._assets = this._assetsManager.getAssetsWithCategory(
+      AssetCategory.Building
+    );
 
     this.setAssetIds();
 
@@ -48,7 +50,9 @@ export class BuildingsManager {
     });
 
     if (hasDuplicates) {
-      this._logger.error(`${this.constructor.name} - There are building with duplicate ids`);
+      this._logger.error(
+        `${this.constructor.name} - There are building with duplicate ids`
+      );
     }
 
     return hasDuplicates;
@@ -60,7 +64,12 @@ export class BuildingsManager {
   private setAssetIds(): void {
     this._buildings
       .filter((building) => building._assetId === -1)
-      .forEach((building) => (building._assetId = Math.floor(Math.random() * (this._assets.length + 1))));
+      .forEach(
+        (building) =>
+          (building._assetId = Math.floor(
+            Math.random() * (this._assets.length + 1)
+          ))
+      );
   }
 
   /**
@@ -81,7 +90,8 @@ export class BuildingsManager {
 
     const min: number = Math.ceil(0);
     const max: number = Math.floor(this._buildings.length) - 1;
-    const randomNumber: number = Math.floor(Math.random() * (max - min + 1)) + min;
+    const randomNumber: number =
+      Math.floor(Math.random() * (max - min + 1)) + min;
 
     return this._buildings[randomNumber];
   }
@@ -96,13 +106,17 @@ export class BuildingsManager {
 
     let building!: Building;
 
-    const buildings: Array<Building> = this._buildings.filter((building) => building.id === id);
+    const buildings: Array<Building> = this._buildings.filter(
+      (building) => building.id === id
+    );
 
     if (buildings.length === 0) {
       this._logger.error(`No buildings with id '${id}' found.`);
     } else {
       if (buildings.length > 1) {
-        this._logger.warn(`More buildings with id '${id}' found. Got the first one.`);
+        this._logger.warn(
+          `More buildings with id '${id}' found. Got the first one.`
+        );
       }
       building = buildings[0];
     }

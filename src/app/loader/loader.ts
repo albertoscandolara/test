@@ -1,10 +1,14 @@
-import { Logger } from '../logger';
-import { backgroundHTMLTemplate, loaderBackgroundSelector, loadingAreaSelector } from '../../config/loader';
+import { LoggerService } from "../logger.service";
+import {
+  backgroundHTMLTemplate,
+  loaderBackgroundSelector,
+  loadingAreaSelector,
+} from "../../config/loader";
 
 //import style from './loader-style.scss';
 
 export abstract class Loader {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
   declare _active: boolean;
 
   #needsBackground: boolean;
@@ -15,8 +19,12 @@ export abstract class Loader {
   /**
    * Constructor
    */
-  constructor(active: boolean = true, needsBackground: boolean = true, container: HTMLElement = document.body) {
-    this._logger = new Logger();
+  constructor(
+    active: boolean = true,
+    needsBackground: boolean = true,
+    container: HTMLElement = document.body
+  ) {
+    this._logger = new LoggerService();
 
     this.#container = container;
     this.#needsBackground = needsBackground;
@@ -47,9 +55,13 @@ export abstract class Loader {
    * Render loader background template
    */
   private renderLoaderBackground(): void {
-    this.#container.insertAdjacentHTML('beforeend', backgroundHTMLTemplate);
-    this.#loaderBackground = this.#container.querySelector(loaderBackgroundSelector) as HTMLElement;
-    this._loadingArea = this.#loaderBackground.querySelector(loadingAreaSelector) as HTMLElement;
+    this.#container.insertAdjacentHTML("beforeend", backgroundHTMLTemplate);
+    this.#loaderBackground = this.#container.querySelector(
+      loaderBackgroundSelector
+    ) as HTMLElement;
+    this._loadingArea = this.#loaderBackground.querySelector(
+      loadingAreaSelector
+    ) as HTMLElement;
   }
 
   /**

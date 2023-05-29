@@ -1,9 +1,9 @@
-import { Logger } from '../../../app/logger';
-import { App3D } from '../app-3D';
-import { tickEventEmitter } from '../../event-emitter/events';
+import { LoggerService } from "../../logger.service";
+import { App3D } from "../app-3D";
+import { tickEventEmitter } from "../../event-emitter/events";
 
 export class Time {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _start: number;
   declare _current: number;

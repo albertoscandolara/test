@@ -1,21 +1,21 @@
 import * as THREE from "three";
-import { Logger } from "../../../app/logger";
+import { LoggerService } from "../../../app/logger.service";
 import { Building } from "./buildings/building";
 import { Character } from "./characters/character";
-import { MainCharacter } from "./characters/main-character";
+import { MainCharacter } from "./characters/main-character/main-character";
 import { Item } from "./items/item";
 import { Light } from "../light";
 import { Floor } from "./floors/floor";
 import { App3D } from "../../../app/3D/app-3D";
 import { BackgroundCubeTexture } from "./backgrounds/background";
 import { BackgroundCubeTexturesManager } from "../../../app/managers/background-cube-textures";
-import { InteractLabel } from "../../../app/3D/interact-label/interact-label";
+import { InteractionLabel } from "../../../app/2D/components/interaction label/interaction label";
 import { Model } from "./model";
 
 export interface IEnvironment {}
 
 export class Environment implements IEnvironment {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _id: number;
   #name: string;
@@ -43,9 +43,9 @@ export class Environment implements IEnvironment {
   declare _scene: THREE.Scene;
   declare _isDebug: boolean;
 
-  declare _interactableModels: Array<Model>;
+  declare _interactableModels: Array<Building | Character | Item>;
   // Interact label
-  declare _interactLabel: InteractLabel;
+  declare _interactLabel: InteractionLabel;
 
   /**
    * Constructor
@@ -65,7 +65,7 @@ export class Environment implements IEnvironment {
     items: Array<Item>,
     lights: Array<Light>
   ) {
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     this._id = id;
     this.#name = name;
@@ -194,7 +194,10 @@ export class Environment implements IEnvironment {
    */
   public setModel(assetId: number): void {
     [...this._characters, ...this._buildings, ...this._items]
-      .filter((model) => !model.asset && model._assetId === assetId)
+      .filter(
+        (model: Building | Character | Item) =>
+          !model.asset && model._assetId === assetId
+      )
       .forEach((model) => {
         model.setAsset(assetId);
 
@@ -257,25 +260,8 @@ export class Environment implements IEnvironment {
       model.update()
     );
 
-    if (!this._mainCharacter) return;
-
-    const interactingModels: Array<Model> = this._interactableModels.filter(
-      (model) => {
-        return (model._checkpoint as Item)._boundingBox?.intersectsBox(
-          this._mainCharacter._boundingBox
-        );
-      }
-    );
-
-    if (interactingModels.length === 1) {
-      const model: Model = interactingModels[0] as Model;
-      model.checkpointColliding = true;
-      // !this._interactLabel.isVisible() && this._interactLabel.show(model);
-    } else {
-      this._interactableModels.forEach((model) => {
-        model.checkpointColliding = false;
-        // this._interactLabel.isVisible() && this._interactLabel.hide();
-      });
+    if (this._mainCharacter) {
+      this._mainCharacter.handleInteractionLabel(this._interactableModels);
     }
   }
 

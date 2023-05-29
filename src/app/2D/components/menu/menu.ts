@@ -1,15 +1,18 @@
 // @ts-ignore
 import { createFromConfig } from "as-wc-lib";
-import { hamburgerMenuconfig, menuConfig } from "../configurations/main menu";
-import { Logger } from "../../logger";
-import { OutputData } from "../models/as-wc-lib.dto";
-import { DISPATCHED_EVENTS } from "../enums/as-wc-lib";
-import { LanguageService } from "../../language.service";
-import { hiddenClass } from "../../../constants/classes";
-import { hamburgerMenuContainerClass } from "../constants/2D page structure";
-import { WEB_COMPONENTS_SIGNATURES } from "../enums/web-components-signatures.enum";
-import { getLastChildAsWcLib } from "../helpers/as-wc-lib";
-import { EnvironmentsService } from "../../environment.service";
+import {
+  hamburgerMenuconfig,
+  menuConfig,
+} from "./configuration/menu configuration";
+import { LoggerService } from "../../../logger.service";
+import { OutputData } from "../../models/as-wc-lib.dto";
+import { DISPATCHED_EVENTS } from "../../enums/as-wc-lib";
+import { LanguageService } from "../../../language.service";
+import { hiddenClass } from "../../../../constants/classes";
+import { hamburgerMenuContainerClass } from "../../constants/2D page structure";
+import { WEB_COMPONENTS_SIGNATURES } from "../../enums/web-components-signatures.enum";
+import { getLastChildAsWcLib } from "../../helpers/as-wc-lib";
+import { EnvironmentsService } from "../../../environment.service";
 
 export class Menu {
   /**
@@ -30,7 +33,7 @@ export class Menu {
   /**
    * Logger
    */
-  private _logger!: Logger;
+  private _logger!: LoggerService;
 
   /**
    * Language service
@@ -48,7 +51,7 @@ export class Menu {
    * @ignore
    */
   constructor() {
-    this._logger = new Logger();
+    this._logger = new LoggerService();
     this._languageService = new LanguageService();
     this._environmentsService = new EnvironmentsService();
 

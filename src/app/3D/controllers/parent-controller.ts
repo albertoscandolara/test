@@ -1,7 +1,7 @@
 import { DOM_EVENTS } from "../../enums/DOMEevents";
-import { MainCharacter } from "../../../models/3D/environment/characters/main-character";
+import { MainCharacter } from "../../../models/3D/environment/characters/main-character/main-character";
 import { AnimationNames } from "../../../models/animations.dto";
-import { Logger } from "../../logger";
+import { LoggerService } from "../../logger.service";
 import { App3D } from "../app-3D";
 import { Time } from "../utils/time";
 
@@ -24,7 +24,7 @@ export class Move {
 }
 
 export class ParentController {
-  protected _logger!: Logger;
+  protected _logger!: LoggerService;
 
   protected _move: Move = new Move();
 
@@ -42,7 +42,7 @@ export class ParentController {
    * @ignore
    */
   constructor(app3D: App3D) {
-    this._logger = new Logger();
+    this._logger = new LoggerService();
     this._time = app3D._time;
 
     this._mainCharacter = app3D._world._mainCharacter as MainCharacter;

@@ -1,4 +1,4 @@
-import { Logger } from "../../../app/logger";
+import { LoggerService } from "../../logger.service";
 import { App3D } from "../app-3D";
 import { resizeEventEmitter } from "../../event-emitter/events";
 
@@ -6,7 +6,7 @@ import { sizesResizeObserverLogDebounceTime } from "../../../config/app-3D";
 
 export class Sizes {
   declare _container: HTMLElement;
-  declare _logger: Logger;
+  declare _logger: LoggerService;
   declare _width: number;
   declare _height: number;
   declare _pixelRatio: number;

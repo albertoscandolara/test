@@ -1,4 +1,4 @@
-import { Logger } from "../logger";
+import { LoggerService } from "../logger.service";
 
 import { environments } from "../../config/environments";
 import { Environment } from "../../models/3D/environment/environment";
@@ -6,7 +6,7 @@ import { Environment } from "../../models/3D/environment/environment";
 let instance!: EnvironmentsManager;
 
 export class EnvironmentsManager {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _environments: Array<Environment>;
 
@@ -20,7 +20,7 @@ export class EnvironmentsManager {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     if (this.checkForDuplicateIds()) return;
 

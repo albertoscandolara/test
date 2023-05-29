@@ -1,7 +1,7 @@
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { Logger } from '../app/logger';
+import { LoggerService } from "../app/logger.service";
 
 export interface IFeature {
   _name: string;
@@ -10,7 +10,7 @@ export interface IFeature {
 }
 
 export class Feature implements IFeature {
-  #logger: Logger;
+  #logger: LoggerService;
   declare _name: string;
   declare _MDNWebDocsUrl: string;
   declare _CanIUseUrl: string;
@@ -20,7 +20,7 @@ export class Feature implements IFeature {
    * Constructor
    */
   constructor(name: string, MDNWebDocsUrl: string, CanIUseUrl: string) {
-    this.#logger = new Logger();
+    this.#logger = new LoggerService();
     this._name = name;
     this._MDNWebDocsUrl = MDNWebDocsUrl;
     this._CanIUseUrl = CanIUseUrl;
@@ -50,7 +50,11 @@ export class Feature implements IFeature {
     return this.fetchSupportLevel().pipe(
       map((isSupported: boolean) => {
         this._isSupported = isSupported;
-        this.#logger.log(`${this.constructor.name}: ${this._name} ${this._isSupported ? 'is' : 'is not'} supported.`);
+        this.#logger.log(
+          `${this.constructor.name}: ${this._name} ${
+            this._isSupported ? "is" : "is not"
+          } supported.`
+        );
         return true;
       })
     );

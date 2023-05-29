@@ -1,31 +1,31 @@
-import * as THREE from 'three';
-import { centimeter, meter } from '../../../app/3D/utils/units';
-import { DracoLoader } from '../../../app/3D/loaders/dracoLoader';
-import { Logger } from '../../../app/logger';
-import { AnimationClips, AnimationNames } from '../../../models/animations.dto';
+import * as THREE from "three";
+import { centimeter, meter } from "../../../app/3D/utils/units";
+import { DracoLoader } from "../../../app/3D/loaders/dracoLoader";
+import { LoggerService } from "../../../app/logger.service";
+import { AnimationClips, AnimationNames } from "../../../models/animations.dto";
 
-const length = require('convert-units');
+const length = require("convert-units");
 
 export enum AssetCategory {
-  Character = 'CHARACTER',
-  Building = 'BUILDING',
-  Floor = 'FLOOR',
-  Item = 'ITEM'
+  Character = "CHARACTER",
+  Building = "BUILDING",
+  Floor = "FLOOR",
+  Item = "ITEM",
 }
 
 export enum AssetLoadingStatus {
-  Unloaded = 'UNLOADED',
-  Loading = 'LOADING',
-  Loaded = 'LOADED'
+  Unloaded = "UNLOADED",
+  Loading = "LOADING",
+  Loaded = "LOADED",
 }
 
 export enum AssetType {
-  GLTF = 'GLTF',
-  DRACO = 'DRACO'
+  GLTF = "GLTF",
+  DRACO = "DRACO",
 }
 
 export class Asset {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _loader: DracoLoader;
 
@@ -56,7 +56,7 @@ export class Asset {
     type: AssetType,
     category: AssetCategory
   ) {
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     this._animations = {
       greet: null,
@@ -64,7 +64,7 @@ export class Asset {
       run: null,
       talk: null,
       walkForward: null,
-      walkBackward: null
+      walkBackward: null,
     };
 
     this._id = id;
@@ -84,12 +84,18 @@ export class Asset {
    */
   public loadAsset(): void {
     if (this._loadingStatus === AssetLoadingStatus.Loading) {
-      this._logger.warn(`${this.constructor.name} - Asset already loading.No need to reload.`, this);
+      this._logger.warn(
+        `${this.constructor.name} - Asset already loading.No need to reload.`,
+        this
+      );
       return;
     }
 
     if (this._loadingStatus === AssetLoadingStatus.Loaded) {
-      this._logger.warn(`${this.constructor.name} - Asset already loaded. No need to reload.`, this);
+      this._logger.warn(
+        `${this.constructor.name} - Asset already loaded. No need to reload.`,
+        this
+      );
       return;
     }
 
@@ -106,35 +112,45 @@ export class Asset {
       return;
     }
 
-    const greetAnimation: THREE.AnimationClip | undefined = animationClipList.find(
-      (animationClip) => animationClip.name === AnimationNames.greet
-    );
+    const greetAnimation: THREE.AnimationClip | undefined =
+      animationClipList.find(
+        (animationClip) => animationClip.name === AnimationNames.greet
+      );
     this._animations.greet = greetAnimation ? greetAnimation : null;
 
-    const idleAnimation: THREE.AnimationClip | undefined = animationClipList.find(
-      (animationClip) => animationClip.name === AnimationNames.idle
-    );
+    const idleAnimation: THREE.AnimationClip | undefined =
+      animationClipList.find(
+        (animationClip) => animationClip.name === AnimationNames.idle
+      );
     this._animations.idle = idleAnimation ? idleAnimation : null;
 
-    const runAnimation: THREE.AnimationClip | undefined = animationClipList.find(
-      (animationClip) => animationClip.name === AnimationNames.run
-    );
+    const runAnimation: THREE.AnimationClip | undefined =
+      animationClipList.find(
+        (animationClip) => animationClip.name === AnimationNames.run
+      );
     this._animations.run = runAnimation ? runAnimation : null;
 
-    const talkAnimation: THREE.AnimationClip | undefined = animationClipList.find(
-      (animationClip) => animationClip.name === AnimationNames.talk
-    );
+    const talkAnimation: THREE.AnimationClip | undefined =
+      animationClipList.find(
+        (animationClip) => animationClip.name === AnimationNames.talk
+      );
     this._animations.talk = talkAnimation ? talkAnimation : null;
 
-    const walkBackwardAnimation: THREE.AnimationClip | undefined = animationClipList.find(
-      (animationClip) => animationClip.name === AnimationNames.walkBackward
-    );
-    this._animations.walkBackward = walkBackwardAnimation ? walkBackwardAnimation : null;
+    const walkBackwardAnimation: THREE.AnimationClip | undefined =
+      animationClipList.find(
+        (animationClip) => animationClip.name === AnimationNames.walkBackward
+      );
+    this._animations.walkBackward = walkBackwardAnimation
+      ? walkBackwardAnimation
+      : null;
 
-    const walkForwardAnimation: THREE.AnimationClip | undefined = animationClipList.find(
-      (animationClip) => animationClip.name === AnimationNames.walkForward
-    );
-    this._animations.walkForward = walkForwardAnimation ? walkForwardAnimation : null;
+    const walkForwardAnimation: THREE.AnimationClip | undefined =
+      animationClipList.find(
+        (animationClip) => animationClip.name === AnimationNames.walkForward
+      );
+    this._animations.walkForward = walkForwardAnimation
+      ? walkForwardAnimation
+      : null;
 
     // Eventually add new animations here
   }
@@ -143,9 +159,12 @@ export class Asset {
    * Set asset offset scale
    */
   public setOffsetScale(): void {
-    const originalBoundingBox: THREE.Box3 = new THREE.Box3().setFromObject(this._asset);
+    const originalBoundingBox: THREE.Box3 = new THREE.Box3().setFromObject(
+      this._asset
+    );
 
-    const originalMaxModelHeight: number = originalBoundingBox.max.y - originalBoundingBox.min.y;
+    const originalMaxModelHeight: number =
+      originalBoundingBox.max.y - originalBoundingBox.min.y;
 
     if (this._defaultHeight === 0) {
       this._logger.warn(
@@ -155,18 +174,25 @@ export class Asset {
       this._defaultHeight = originalMaxModelHeight;
     }
 
-    const scaleFactor: number = length(this._defaultHeight).from(centimeter).to(meter) / originalMaxModelHeight;
+    const scaleFactor: number =
+      length(this._defaultHeight).from(centimeter).to(meter) /
+      originalMaxModelHeight;
 
     if (isNaN(scaleFactor) || !isFinite(scaleFactor)) {
-      this._logger.error(`${this.constructor.name} - Invalid scale on model '${this._id}'`);
+      this._logger.error(
+        `${this.constructor.name} - Invalid scale on model '${this._id}'`
+      );
       return;
     }
 
     this._asset.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
     // Log new height
-    const newBoundingBox: THREE.Box3 = new THREE.Box3().setFromObject(this._asset);
-    const newMaxModelHeight: number = newBoundingBox.max.y - newBoundingBox.min.y;
+    const newBoundingBox: THREE.Box3 = new THREE.Box3().setFromObject(
+      this._asset
+    );
+    const newMaxModelHeight: number =
+      newBoundingBox.max.y - newBoundingBox.min.y;
     this._logger.log(
       `${this.constructor.name} - Asset named '${this.#name}' with id '${
         this._id
@@ -184,7 +210,9 @@ export class Asset {
     this._asset.position.add(new THREE.Vector3(0, 0.1, 0));
 
     this._logger.log(
-      `${this.constructor.name} - Asset named '${this.#name}' with id '${this._id}' moved to offset position.`,
+      `${this.constructor.name} - Asset named '${this.#name}' with id '${
+        this._id
+      }' moved to offset position.`,
       this._asset.rotation
     );
   }
@@ -196,7 +224,9 @@ export class Asset {
     this._asset.children[0].rotation.copy(this._offsetRotation);
 
     this._logger.log(
-      `${this.constructor.name} - Asset named '${this.#name}' with id '${this._id}' rotated as offset rotation.`,
+      `${this.constructor.name} - Asset named '${this.#name}' with id '${
+        this._id
+      }' rotated as offset rotation.`,
       this._asset.rotation
     );
   }

@@ -1,13 +1,13 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
-import { Logger } from '../../../app/logger';
-import { BackgroundCubeTexture } from '../../../models/3D/environment/backgrounds/background';
-import { cubeTextureLoadedEventEmitter } from '../../../app/event-emitter/events';
+import { LoggerService } from "../../logger.service";
+import { BackgroundCubeTexture } from "../../../models/3D/environment/backgrounds/background";
+import { cubeTextureLoadedEventEmitter } from "../../../app/event-emitter/events";
 
 let instance!: CubeTextureLoader;
 
 export class CubeTextureLoader {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _loader: THREE.CubeTextureLoader;
 
@@ -21,7 +21,7 @@ export class CubeTextureLoader {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     this.setLoader();
 
@@ -39,11 +39,13 @@ export class CubeTextureLoader {
    * Load background textures
    */
   public loadCubeTexture(background: BackgroundCubeTexture): void {
-    this._loader.setPath(background._basePath).load(background._urls, (texture) => {
-      background._cubeTexture = texture;
+    this._loader
+      .setPath(background._basePath)
+      .load(background._urls, (texture) => {
+        background._cubeTexture = texture;
 
-      // Emit a value to say it's loaded
-      cubeTextureLoadedEventEmitter.emit(background._id);
-    });
+        // Emit a value to say it's loaded
+        cubeTextureLoadedEventEmitter.emit(background._id);
+      });
   }
 }

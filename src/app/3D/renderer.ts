@@ -1,12 +1,12 @@
 import * as THREE from "three";
 
 import { App3D } from "./app-3D";
-import { Logger } from "../logger";
+import { LoggerService } from "../logger.service";
 import { Sizes } from "./utils/sizes";
 import { Camera } from "./camera";
 
 export class Renderer {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _canvas: HTMLCanvasElement;
   declare _instance: THREE.WebGLRenderer;

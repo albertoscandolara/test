@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { App3D } from "../app-3D";
-import { Logger } from "../../logger";
+import { LoggerService } from "../../logger.service";
 import { Sizes } from "../utils/sizes";
 import { Camera } from "../camera";
 
@@ -14,7 +14,7 @@ import { ItemsManager } from "../../../app/managers/items-manager";
 import { DracoLoader } from "../loaders/dracoLoader";
 import { Environment } from "../../../models/3D/environment/environment";
 import { Model } from "../../../models/3D/environment/model";
-import { MainCharacter } from "../../../models/3D/environment/characters/main-character";
+import { MainCharacter } from "../../../models/3D/environment/characters/main-character/main-character";
 import { Character } from "../../../models/3D/environment/characters/character";
 import { Item } from "../../../models/3D/environment/items/item";
 
@@ -24,7 +24,7 @@ import { EnvironmentsService } from "../../environment.service";
 
 export class World {
   declare _app3D: App3D;
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _backgroundCubeTexturesManager: BackgroundCubeTexturesManager;
   #environmentsService!: EnvironmentsService;
@@ -100,8 +100,6 @@ export class World {
         _height,
         _assetId,
         false,
-        null,
-        null,
         null,
         _speed,
         _canMove,
@@ -225,6 +223,6 @@ export class World {
       this._mainCharacter.setCurrentAnimationName(AnimationNames.talk);
     }, timeout);
 
-    const interactionTabId: number = model._goToHTML as number;
+    // const interactionTabId: number = model._goToHTML as number;
   }
 }

@@ -1,4 +1,4 @@
-import { Logger } from "../logger";
+import { LoggerService } from "../logger.service";
 
 import { characters, mainCharacterId } from "../../config/characters";
 import { AssetsManager } from "./assets-manager";
@@ -8,7 +8,7 @@ import { Character } from "../../models/3D/environment/characters/character";
 let instance!: CharactersManager;
 
 export class CharactersManager {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _assetsManager: AssetsManager;
   declare _characters: Array<Character>;
@@ -24,7 +24,7 @@ export class CharactersManager {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     if (this.checkForDuplicateIds()) return;
 

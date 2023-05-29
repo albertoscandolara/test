@@ -1,13 +1,13 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
-import { Logger } from '../../../app/logger';
-import { BackgroundCubeTexture } from '../../../models/3D/environment/backgrounds/background';
-import { cubeTextureLoadedEventEmitter } from '../../../app/event-emitter/events';
+import { LoggerService } from "../../logger.service";
+import { BackgroundCubeTexture } from "../../../models/3D/environment/backgrounds/background";
+import { cubeTextureLoadedEventEmitter } from "../../../app/event-emitter/events";
 
 let instance!: TextureLoader;
 
 export class TextureLoader {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _loader: THREE.TextureLoader;
 
@@ -21,7 +21,7 @@ export class TextureLoader {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     this.setLoader();
 

@@ -24,12 +24,11 @@ export const environments: Array<Environment> = [
         4,
         false,
         null,
-        null,
-        null,
         0.1,
         false,
         new THREE.Vector3(3, 0, -3),
-        new THREE.Euler(0, Math.PI / 2, 0)
+        new THREE.Euler(0, Math.PI / 2, 0),
+        null
       ),
       new Character(
         1,
@@ -39,12 +38,11 @@ export const environments: Array<Environment> = [
         0,
         false,
         null,
-        null,
-        null,
         0.1,
         false,
         new THREE.Vector3(3, 0, -6),
-        new THREE.Euler(0, Math.PI / 2, 0)
+        new THREE.Euler(0, Math.PI / 2, 0),
+        null
       ),
     ],
     [
@@ -56,10 +54,9 @@ export const environments: Array<Environment> = [
         1,
         false,
         null,
-        1,
-        null,
         new THREE.Vector3(-50, 0, -30),
-        new THREE.Euler(0, -Math.PI / 2, 0)
+        new THREE.Euler(0, -Math.PI / 2, 0),
+        1
       ),
     ],
     [
@@ -69,8 +66,6 @@ export const environments: Array<Environment> = [
         `Checkpoint`,
         1,
         3,
-        null,
-        null,
         null,
         false,
         new THREE.Vector3(20, 0, -3),
@@ -83,8 +78,6 @@ export const environments: Array<Environment> = [
         1,
         5,
         null,
-        null,
-        null,
         false,
         new THREE.Vector3(20, 0, -10),
         new THREE.Euler(0, Math.PI / 2, 0)
@@ -95,8 +88,6 @@ export const environments: Array<Environment> = [
         `Allosaurus`,
         1,
         6,
-        null,
-        null,
         null,
         false,
         new THREE.Vector3(20, 0, -17),
@@ -134,18 +125,15 @@ export const environments: Array<Environment> = [
           0.2,
           3,
           null,
-          null,
-          null,
           false,
           new THREE.Vector3(5, 0, -28),
           new THREE.Euler(0, 0, 0)
         ),
-        null,
-        1,
         0.1,
         false,
         new THREE.Vector3(5, 0, -29),
-        new THREE.Euler(0, -Math.PI, 0)
+        new THREE.Euler(0, -Math.PI, 0),
+        1
       ),
     ],
     [
@@ -163,16 +151,13 @@ export const environments: Array<Environment> = [
           1,
           3,
           null,
-          null,
-          null,
           false,
           new THREE.Vector3(0, 0, -29),
           new THREE.Euler(0, 0, 0)
         ),
-        2,
-        null,
         new THREE.Vector3(0, 0, -50),
-        new THREE.Euler(0, -Math.PI, 0)
+        new THREE.Euler(0, -Math.PI, 0),
+        2
       ),
       // new Building(
       //   2,
@@ -215,8 +200,6 @@ export const environments: Array<Environment> = [
         1,
         5,
         null,
-        null,
-        null,
         false,
         new THREE.Vector3(20, 0, -15),
         new THREE.Euler(0, Math.PI / 2, 0)
@@ -227,8 +210,6 @@ export const environments: Array<Environment> = [
         `Allosaurus`,
         1,
         6,
-        null,
-        null,
         null,
         false,
         new THREE.Vector3(20, 0, -25),
