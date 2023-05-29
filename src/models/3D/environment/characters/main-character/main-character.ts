@@ -1,10 +1,12 @@
 import * as THREE from "three";
 import { Controller } from "../../../../../app/3D/controllers/controller";
-import { Logger } from "../../../../../app/logger";
+import { LoggerService } from "../../../../../app/logger.service";
 import { Item } from "../../items/item";
 import { Character } from "../character";
-import { InteractionLabel } from "../../../../../app/3D/interact-label/interact-label";
+import { InteractionLabel } from "../../../../../app/2D/components/interaction label/interaction label";
 import { Model } from "../../model";
+import { AnimationNames } from "../../../../animations.dto";
+import { Building } from "../../buildings/building";
 
 export class MainCharacter extends Character {
   // User controls
@@ -27,8 +29,6 @@ export class MainCharacter extends Character {
     assetId: number,
     isInteractable: boolean,
     checkpoint: Item | null,
-    goToEnvironment: number | null,
-    goToHTML: number | null,
     speed: number,
     canMove: boolean,
     initialPosition: THREE.Vector3 = new THREE.Vector3(),
@@ -42,14 +42,13 @@ export class MainCharacter extends Character {
       assetId,
       isInteractable,
       checkpoint,
-      goToEnvironment,
-      goToHTML,
       speed,
       canMove,
       initialPosition,
-      rotation
+      rotation,
+      null
     );
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     this._logger.log(`${this.constructor.name} class instantiated:`, this);
   }
@@ -81,19 +80,24 @@ export class MainCharacter extends Character {
    * @param {Array<Model>} models list of current environment interatable models
    * @returns {boolean} true if main character is colliding, false otherwise
    */
-  private _getCollidingModel(models: Array<Model>): Model {
-    const collidingModel: Model = models.find((model) => {
+  private _getCollidingModel(
+    models: Array<Building | Character | Item>
+  ): Building | Character | Item {
+    const collidingModel: Building | Character | Item = models.find((model) => {
       return (model._checkpoint as Item)._boundingBox?.intersectsBox(
         this._boundingBox
       );
-    }) as Model;
+    }) as Building | Character | Item;
     return collidingModel;
   }
 
-  public handleInteractionLabel(models: Array<Model>): void {
+  public handleInteractionLabel(
+    models: Array<Building | Character | Item>
+  ): void {
     if (this._isColliding(models)) {
       if (!this.#interactionLabel) {
-        const model: Model = this._getCollidingModel(models);
+        const model: Building | Character | Item =
+          this._getCollidingModel(models);
         this.#interactionLabel = new InteractionLabel(model);
       }
     } else {

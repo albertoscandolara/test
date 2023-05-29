@@ -1,7 +1,7 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 
-import { Logger } from "../../../app/logger";
+import { LoggerService } from "../../logger.service";
 import {
   Asset,
   AssetLoadingStatus,
@@ -12,7 +12,7 @@ import * as THREE from "three";
 let instance!: DracoLoader;
 
 export class DracoLoader {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _dracoDecoderPath: string;
   declare _loader: GLTFLoader;
@@ -27,7 +27,7 @@ export class DracoLoader {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     this._dracoDecoderPath = "../../../libs/draco/";
     this.setLoader();

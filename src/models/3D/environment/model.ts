@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { AxesHelper, BoxHelper, Mesh } from "three";
-import { Logger } from "../../../app/logger";
+import { LoggerService } from "../../../app/logger.service";
 import { DracoLoader } from "../../../app/3D/loaders/dracoLoader";
 import { AssetsManager } from "../../../app/managers/assets-manager";
 import { Asset } from "./asset";
@@ -20,7 +20,7 @@ import { COLORS } from "../../../constants/colors";
 const SkeletonUtils = require("three/examples/jsm/utils/SkeletonUtils");
 
 export class Model {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _animationMixer: THREE.AnimationMixer;
   declare _animationActions: AnimationActions;
@@ -44,8 +44,6 @@ export class Model {
   declare _isInteractable: boolean;
   declare _checkpoint: Item | null;
   declare _checkpointColliding: boolean;
-  declare _goToEnvironment: number | null;
-  declare _goToHTML: number | null;
 
   // App 3D params
   declare _scene: THREE.Scene;
@@ -67,12 +65,10 @@ export class Model {
     assetId: number = -1,
     isInteractable: boolean,
     checkpoint: Item | null,
-    goToEnvironment: number | null,
-    goToHTML: number | null,
     initialPosition: THREE.Vector3 = new THREE.Vector3(),
     rotation: THREE.Euler = new THREE.Euler(0, 0, 0)
   ) {
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     // Animation parameters
     this._animationActions = {
@@ -101,43 +97,6 @@ export class Model {
     this._isInteractable = isInteractable;
     if (this._isInteractable) {
       this._checkpoint = checkpoint ?? null;
-      this._goToEnvironment = goToEnvironment ?? null;
-      this._goToHTML = goToHTML ?? null;
-
-      if (!this._checkpoint) {
-        this._logger.warn(
-          `${this.constructor.name} model is interactable, but 'checkpoint' was not provided`,
-          this
-        );
-      }
-
-      if (!this._goToEnvironment && !this._goToHTML) {
-        this._logger.warn(
-          `${this.constructor.name} model is interactable, but neither 'goToEnvironment' nor 'goToHTML' parameter were set`,
-          this
-        );
-      }
-    } else {
-      if (checkpoint) {
-        this._logger.warn(
-          `${this.constructor.name} 'checkpoint' parameter was set, but model is not interactable`,
-          this
-        );
-      }
-
-      if (goToEnvironment) {
-        this._logger.warn(
-          `${this.constructor.name} 'goToEnvironment' parameter was set, but model is not interactable`,
-          this
-        );
-      }
-
-      if (goToHTML) {
-        this._logger.warn(
-          `${this.constructor.name} 'goToHTML' parameter was set, but model is not interactable`,
-          this
-        );
-      }
     }
 
     this._logger.log(`${this.constructor.name} class instantiated:`, this);

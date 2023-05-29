@@ -1,10 +1,5 @@
-import {
-  defaultLanguage,
-  availableLanguages,
-  languages,
-} from "../config/languages";
 import { Environment } from "../models/3D/environment/environment";
-import { Logger } from "./logger";
+import { LoggerService } from "./logger.service";
 import { environments } from "../config/environments";
 import { changeEnvironmentEventEmitter } from "./event-emitter/events";
 
@@ -15,7 +10,7 @@ let instance: EnvironmentsService | undefined = undefined;
  */
 export class EnvironmentsService {
   private _environments: Array<Environment> = [];
-  private _logger!: Logger;
+  private _logger!: LoggerService;
 
   /**
    * Constructor
@@ -29,7 +24,7 @@ export class EnvironmentsService {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
     this._setEnvironments();
   }
 

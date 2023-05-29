@@ -1,14 +1,14 @@
-import { Logger } from '../logger';
+import { LoggerService } from "../logger.service";
 
-import { items } from '../../config/items';
-import { AssetsManager } from './assets-manager';
-import { Asset, AssetCategory } from '../../models/3D/environment/asset';
-import { Item } from '../../models/3D/environment/items/item';
+import { items } from "../../config/items";
+import { AssetsManager } from "./assets-manager";
+import { Asset, AssetCategory } from "../../models/3D/environment/asset";
+import { Item } from "../../models/3D/environment/items/item";
 
 let instance!: ItemsManager;
 
 export class ItemsManager {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
   declare _assetsManager: AssetsManager;
   declare _items: Array<Item>;
   declare _assets: Array<Asset>;
@@ -23,14 +23,16 @@ export class ItemsManager {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
 
     if (this.checkForDuplicateIds()) return;
 
     this._items = items;
 
     this._assetsManager = new AssetsManager();
-    this._assets = this._assetsManager.getAssetsWithCategory(AssetCategory.Item);
+    this._assets = this._assetsManager.getAssetsWithCategory(
+      AssetCategory.Item
+    );
 
     this.setAssetIds();
 
@@ -48,7 +50,9 @@ export class ItemsManager {
     });
 
     if (hasDuplicates) {
-      this._logger.error(`${this.constructor.name} - There are items with duplicate ids`);
+      this._logger.error(
+        `${this.constructor.name} - There are items with duplicate ids`
+      );
     }
 
     return hasDuplicates;
@@ -69,7 +73,12 @@ export class ItemsManager {
   private setAssetIds(): void {
     this._items
       .filter((item) => item._assetId === -1)
-      .forEach((item) => (item._assetId = Math.floor(Math.random() * (this._assets.length + 1))));
+      .forEach(
+        (item) =>
+          (item._assetId = Math.floor(
+            Math.random() * (this._assets.length + 1)
+          ))
+      );
   }
 
   /**
@@ -88,7 +97,9 @@ export class ItemsManager {
       this._logger.error(`No items with id '${id}' found.`);
     } else {
       if (items.length > 1) {
-        this._logger.warn(`More items with id '${id}' found. Got the first one.`);
+        this._logger.warn(
+          `More items with id '${id}' found. Got the first one.`
+        );
       }
       item = items[0];
     }

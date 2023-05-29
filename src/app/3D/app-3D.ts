@@ -9,7 +9,7 @@ import {
   showInteractionTabEventEmitter,
   tickEventEmitter,
 } from "../event-emitter/events";
-import { Logger } from "../logger";
+import { LoggerService } from "../logger.service";
 import { Sizes } from "./utils/sizes";
 import { Time } from "./utils/time";
 import { Camera } from "./camera";
@@ -33,11 +33,12 @@ import { LanguageService } from "../language.service";
 import { EnvironmentsService } from "../environment.service";
 import { Model } from "../../models/3D/environment/model";
 import { TouchScreenDevice } from "../touch-screen";
+import { INSERT_ADJACENT_HTML_POSITIONS } from "../../constants/insertAdjacentHTMLPositions";
 
 export class App3D {
   declare _debug: Debug;
   declare _touchScreenDevice: TouchScreenDevice;
-  declare _logger: Logger;
+  declare _logger: LoggerService;
   declare _languageService: LanguageService;
   declare _environmentsService: EnvironmentsService;
   declare _gui: GUI;
@@ -63,6 +64,8 @@ export class App3D {
 
   /**
    * Constructor
+   * @constructor
+   * @ignore
    */
   constructor(app: App) {
     this._debug = app._debug;
@@ -98,14 +101,19 @@ export class App3D {
 
   /**
    * Set canvas element
+   * @returns {void}
    */
-  private setCanvas() {
-    this._container.insertAdjacentHTML("beforeend", canvasHTMLTemplate);
+  private setCanvas(): void {
+    this._container.insertAdjacentHTML(
+      INSERT_ADJACENT_HTML_POSITIONS.BEFORE_END as InsertPosition,
+      canvasHTMLTemplate
+    );
     this._canvas = document.querySelector(canvasSelector) as HTMLCanvasElement;
   }
 
   /**
    * Set event listeners connected to this class
+   * @returns {void}
    */
   private setEventListeners(): void {
     resizeEventEmitter.on(() => this.resize());
@@ -121,6 +129,7 @@ export class App3D {
 
   /**
    * Resize
+   * @returns {void}
    */
   private resize(): void {
     this._camera?.resize();
@@ -129,6 +138,7 @@ export class App3D {
 
   /**
    * Update all elements in the scene
+   * @returns {void}
    */
   private update(): void {
     //this._camera.update();
@@ -139,21 +149,24 @@ export class App3D {
   /**
    * An asset has been loaded.
    * Set it to all the models with the corresponding assetId
-   * @param assetId id of the loaded asset
+   * @param {number} assetId id of the loaded asset
+   * @returns {void}
    */
-  private setModel(assetId: number) {
+  private setModel(assetId: number): void {
     this._world.setModel(assetId);
   }
 
   /**
    * A background cube texture has been loaded
+   * @returns {void}
    */
-  private setBackgroundCubeTexture() {
+  private setBackgroundCubeTexture(): void {
     this._world.setBackgroundCubeTexture();
   }
 
   /**
    * Change world environment
+   * @returns {void}
    */
   public setEnvironment(): void {
     this._world.setEnvironment();
@@ -162,6 +175,7 @@ export class App3D {
   /**
    * The user has interacted with a model that has to show a tab. Show it.
    * @param {Model} model model interacting with the main character
+   * @returns {void}
    */
   public setInteractionTab(model: Model): void {
     this._world.setInteractionTab(model);

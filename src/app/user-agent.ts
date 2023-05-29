@@ -1,12 +1,12 @@
-import { Logger } from './logger';
+import { LoggerService } from "./logger.service";
 
-import { cssFeatures } from '../config/features';
-import {} from '../config/user-agent';
-import { Feature } from '../models/feature';
-import { forkJoin, Observable } from 'rxjs';
+import { cssFeatures } from "../config/features";
+import {} from "../config/user-agent";
+import { Feature } from "../models/feature";
+import { forkJoin, Observable } from "rxjs";
 
 export class UserAgent {
-  #logger: Logger;
+  #logger: LoggerService;
   #caniuse: any;
 
   declare _browserName: string;
@@ -18,7 +18,7 @@ export class UserAgent {
    * Constructor
    */
   constructor() {
-    this.#logger = new Logger();
+    this.#logger = new LoggerService();
     this._cssFeatures = cssFeatures;
 
     //this.#caniuse = caniuse;
@@ -77,7 +77,9 @@ export class UserAgent {
    */
   private setFeaturesCompatibility(): void {
     let observables: Array<Observable<any>> = [];
-    Object.values(this._cssFeatures).forEach((feature) => observables.push(feature.setSupportLevel()));
+    Object.values(this._cssFeatures).forEach((feature) =>
+      observables.push(feature.setSupportLevel())
+    );
 
     forkJoin(observables)
       //.pipe(take(1))
@@ -88,7 +90,7 @@ export class UserAgent {
         },
         complete: () => {
           this.notifyUnsupportedFeatures();
-        }
+        },
       });
   }
 
@@ -96,11 +98,16 @@ export class UserAgent {
    * Warn the user about possible stylistic flaws due to browser incompatibility
    */
   private notifyUnsupportedFeatures(): void {
-    const nonSupportedFeatures: Array<Feature> = this._cssFeatures.filter((feature) => feature.isSupported);
+    const nonSupportedFeatures: Array<Feature> = this._cssFeatures.filter(
+      (feature) => feature.isSupported
+    );
 
     if (nonSupportedFeatures.length) {
       nonSupportedFeatures.forEach((feature) => {
-        document.body.insertAdjacentHTML('beforeend', `<div>${feature.name}</div>`);
+        document.body.insertAdjacentHTML(
+          "beforeend",
+          `<div>${feature.name}</div>`
+        );
       });
     }
   }
@@ -112,24 +119,27 @@ export class UserAgent {
   private getBrowserInfo(): { name: string; version: string } {
     var ua = navigator.userAgent,
       tem,
-      M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+      M =
+        ua.match(
+          /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i
+        ) || [];
     if (/trident/i.test(M[1])) {
       tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-      return { name: 'IE ', version: tem[1] || '' };
+      return { name: "IE ", version: tem[1] || "" };
     }
-    if (M[1] === 'Chrome') {
+    if (M[1] === "Chrome") {
       tem = ua.match(/\bOPR\/(\d+)/);
       if (tem != null) {
-        return { name: 'Opera', version: tem[1] };
+        return { name: "Opera", version: tem[1] };
       }
     }
-    M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+    M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, "-?"];
     if ((tem = ua.match(/version\/(\d+)/i)) != null) {
       M.splice(1, 1, tem[1]);
     }
     return {
       name: M[0],
-      version: M[1]
+      version: M[1],
     };
   }
 }

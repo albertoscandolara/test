@@ -5,14 +5,14 @@ import {
 } from "../config/languages";
 import { translations } from "../config/translations";
 import { Language } from "../models/language";
-import { Logger } from "./logger";
+import { LoggerService } from "./logger.service";
 
 let instance!: LanguageService;
 
 export class LanguageService {
   private _language!: string;
   private _translations!: Map<string, string>;
-  private _logger!: Logger;
+  private _logger!: LoggerService;
 
   /**
    * Constructor
@@ -24,7 +24,7 @@ export class LanguageService {
     }
     instance = this;
 
-    this._logger = new Logger();
+    this._logger = new LoggerService();
     this.setLanguage();
   }
 

@@ -14,8 +14,6 @@ export const characters: Array<Character> = [
     // -1, // random main character
     false,
     null,
-    null,
-    null,
     0.2,
     true,
     new THREE.Vector3(0, 0, 0),

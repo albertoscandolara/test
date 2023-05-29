@@ -1,8 +1,8 @@
-import { Debug } from './debug';
+import { Debug } from "./debug";
 
-let instance!: Logger;
+let instance!: LoggerService;
 
-export class Logger {
+export class LoggerService {
   private debug!: Debug;
   /**
    * Constructor

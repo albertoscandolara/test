@@ -1,8 +1,8 @@
-import { CubeTextureLoader } from '../../../../app/3D/loaders/cubeTextureLoader';
-import { Logger } from '../../../../app/logger';
+import { CubeTextureLoader } from "../../../../app/3D/loaders/cubeTextureLoader";
+import { LoggerService } from "../../../../app/logger.service";
 
 export class BackgroundCubeTexture {
-  declare _logger: Logger;
+  declare _logger: LoggerService;
 
   declare _id: number;
   declare _name: string;
@@ -16,8 +16,14 @@ export class BackgroundCubeTexture {
   /**
    * Constructor
    */
-  constructor(id: number, name: string, description: string, basePath: string, urls: Array<string>) {
-    this._logger = new Logger();
+  constructor(
+    id: number,
+    name: string,
+    description: string,
+    basePath: string,
+    urls: Array<string>
+  ) {
+    this._logger = new LoggerService();
 
     this._id = id;
     this._name = name;
@@ -34,7 +40,10 @@ export class BackgroundCubeTexture {
    */
   public loadCubeTexture(): void {
     if (this._id === -1) {
-      this._logger.error(`${this.constructor.name} - Can't load background with id set to -1`, this);
+      this._logger.error(
+        `${this.constructor.name} - Can't load background with id set to -1`,
+        this
+      );
       return;
     }
 

@@ -26,4 +26,9 @@ export const SVG_SIGNATURES = {
   GITHUB_SVG_SIGNATURE: "githubContactSvgTemplate",
   INSTAGRAM_SVG_SIGNATURE: "instagramContactSvgTemplate",
   LINKEDIN_SVG_SIGNATURE: "linkedInContactSvgTemplate",
+
+  // Others
+  CHAT_SVG_SIGNATURE: "chatSvgTemplate",
+  DOOR_SVG_SIGNATURE: "doorSvgTemplate",
+  MAGNIFYING_GLASS_SVG_SIGNATURE: "magnifyingGlassSvgTemplate",
 };

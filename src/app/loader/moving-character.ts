@@ -1,15 +1,20 @@
-import { Logger } from '../logger';
-import { defaultInterval, movingCharacterHTMLTemplate, movingCharacterSelector, speedX } from '../../config/loader';
+import { LoggerService } from "../logger.service";
+import {
+  defaultInterval,
+  movingCharacterHTMLTemplate,
+  movingCharacterSelector,
+  speedX,
+} from "../../config/loader";
 
-import { CharactersManager } from '../managers/characters-manager';
+import { CharactersManager } from "../managers/characters-manager";
 
 const enum Direction {
-  forward = 'FORWARD',
-  backward = 'BACKWARD'
+  forward = "FORWARD",
+  backward = "BACKWARD",
 }
 
 export class MovingCharacter {
-  #logger: Logger;
+  #logger: LoggerService;
   #active!: boolean;
   //#svg: Array<string>;
 
@@ -29,7 +34,7 @@ export class MovingCharacter {
    * Constructor
    */
   constructor(active: boolean = true, container: HTMLElement = document.body) {
-    this.#logger = new Logger();
+    this.#logger = new LoggerService();
 
     //this.#svg = new CharactersManager().getRandomCharacter().svg;
     this.#container = container;
@@ -65,8 +70,13 @@ export class MovingCharacter {
    * Initialize character image
    */
   private initImage(): void {
-    this.#container.insertAdjacentHTML('beforeend', movingCharacterHTMLTemplate);
-    this.#image = this.#container.querySelector(movingCharacterSelector) as HTMLImageElement;
+    this.#container.insertAdjacentHTML(
+      "beforeend",
+      movingCharacterHTMLTemplate
+    );
+    this.#image = this.#container.querySelector(
+      movingCharacterSelector
+    ) as HTMLImageElement;
 
     this.#imageWidth = this.#image.getBoundingClientRect().width;
   }
@@ -77,7 +87,9 @@ export class MovingCharacter {
   private updateImage(): void {
     this.updateContainerLimits();
 
-    const currentImageLeft: number = parseInt(this.#image.style.left) || this.#container.getBoundingClientRect().left;
+    const currentImageLeft: number =
+      parseInt(this.#image.style.left) ||
+      this.#container.getBoundingClientRect().left;
     let expectedImageLeft: number = currentImageLeft;
 
     switch (this.#currentImageIndex) {
@@ -116,7 +128,7 @@ export class MovingCharacter {
       this.hide();
     }
 
-    this.#image.style.left = expectedImageLeft + 'px';
+    this.#image.style.left = expectedImageLeft + "px";
     //this.#image.src = this.#walkingImagesPaths[this.#currentImageIndex];
   }
 

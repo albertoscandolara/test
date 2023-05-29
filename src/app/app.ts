@@ -7,7 +7,7 @@ import {
 import { Debug } from "./debug";
 import { LanguageService } from "./language.service";
 import { EnvironmentsService } from "./environment.service";
-import { Logger } from "./logger";
+import { LoggerService } from "./logger.service";
 import { UserAgent } from "./user-agent";
 
 import { App3D } from "./3D/app-3D";
@@ -18,7 +18,7 @@ import { Environment } from "../models/3D/environment/environment";
 export class App {
   declare _debug: Debug;
   declare _touchScreenDevice: TouchScreenDevice;
-  declare _logger: Logger;
+  declare _logger: LoggerService;
   declare _languageService: LanguageService;
   declare _environmentsService: EnvironmentsService;
   //#userAgent: UserAgent;
@@ -36,7 +36,7 @@ export class App {
     this.#container = container;
     this._debug = new Debug();
     this._touchScreenDevice = new TouchScreenDevice();
-    this._logger = new Logger();
+    this._logger = new LoggerService();
     this._languageService = new LanguageService();
     this._environmentsService = new EnvironmentsService();
     //this.#userAgent = new UserAgent();

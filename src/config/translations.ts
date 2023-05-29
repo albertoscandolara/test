@@ -22,10 +22,7 @@ export const translations: Map<string, Translation> = new Map<
       "Изменить язык"
     ),
   ],
-  [
-    "Courtyard",
-    new Translation("Courtyard", "Cour", "Cortile", "Внутренний двор"),
-  ],
+  ["Home", new Translation("Home", "Home", "Home", "Дом")],
   [
     "3D Exhibition",
     new Translation(
@@ -40,22 +37,19 @@ export const translations: Map<string, Translation> = new Map<
     new Translation("Websites", "Sites Internet", "Siti web", "Веб-сайты"),
   ],
   ["About me", new Translation("About me", "Sur moi", "Su di me", "Обо мне")],
+  ["Enter", new Translation("Enter", "Entrer", "Entra", "Входить")],
+  ["Talk", new Translation("Talk", "Parle", "Parla", "Разговаривать")],
   [
-    "Enter this building",
+    "Interact",
     new Translation(
-      "Enter this building",
-      "l",
-      "Entra in questo edificio",
-      "n"
+      "Interact",
+      "Interagir",
+      "Interagisci",
+      "Взаимодействовать"
     ),
   ],
   [
-    "Talk to this character",
-    new Translation(
-      "Talk to this character",
-      "l",
-      "Parla a questo personaggio",
-      "Talk to this character russian"
-    ),
+    "Inspect",
+    new Translation("Inspect", "Inspecter", "Ispeziona", "Осмотреть"),
   ],
 ]);

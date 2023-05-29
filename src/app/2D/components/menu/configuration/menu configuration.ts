@@ -1,13 +1,13 @@
-import { BUTTON_TYPES_DICTIONARY } from "../enums/as-wc-lib";
-import { SVG_SIGNATURES } from "../enums/svg-signatures.enum";
-import { WEB_COMPONENTS_SIGNATURES } from "../enums/web-components-signatures.enum";
+import { BUTTON_TYPES_DICTIONARY } from "../../../enums/as-wc-lib";
+import { SVG_SIGNATURES } from "../../../enums/svg-signatures.enum";
+import { WEB_COMPONENTS_SIGNATURES } from "../../../enums/web-components-signatures.enum";
 
 import {
   italianISOCode,
   frenchISOCode,
   russianISOCode,
   englishISOCode,
-} from "../../../config/languages";
+} from "../../../../../config/languages";
 
 export const hamburgerMenuconfig = {
   type: WEB_COMPONENTS_SIGNATURES.AS_BUTTON_SQUARE,
