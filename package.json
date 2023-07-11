@@ -30,7 +30,7 @@
     "xml-loader": "^1.2.1"
   },
   "dependencies": {
-    "as-wc-lib": "^1.0.36",
+    "as-wc-lib": "^1.0.37",
     "html-webpack-plugin": "^5.5.1",
     "rxjs": "^7.8.1"
   }
