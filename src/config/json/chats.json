@@ -1,0 +1,16 @@
+{
+  "chats": [
+    {
+      "id": 1,
+      "containerCssSelector": "document",
+      "speechBubbles": [
+        {
+          "id": 1,
+          "text": "Hello! \r\n Welcome to the Louvre! \r\n Here, like inside the iconic museum, you will find my experiments with 3D arts (mostly done with Blender). Interact with every piece to see its details and give it a closer look through the provided link! \r\n Enjoy the visit!",
+          "speaker": true
+        }
+      ],
+      "chatHTMLElement": null
+    }
+  ]
+}

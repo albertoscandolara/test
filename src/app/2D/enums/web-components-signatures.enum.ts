@@ -10,6 +10,10 @@ export const enum WEB_COMPONENTS_SIGNATURES {
   // Cards
   AS_CARD_01 = "as-card-01",
 
+  // Dialogs
+  AS_CHAT = "as-chat",
+  AS_SPEECH_BUBBLE = "as-speech-bubble",
+
   // Headers
   AS_HEADER_FADED = "as-header-faded",
   AS_HEADER_CLOSE = "as-header-close",
